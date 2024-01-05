@@ -1,4 +1,4 @@
 # My Neovim Config
 
 <!-- Screenshots -->
-![Screenshot](editor.png)
+![Screenshot](screenshot.png)
