@@ -19,3 +19,8 @@ vim.opt.incsearch = true
 vim.opt.signcolumn = "yes"
 
 vim.opt.updatetime = 50
+
+vim.o.foldcolumn = "0"
+vim.o.foldlevel = 99
+vim.o.foldlevelstart = 99
+vim.o.foldenable = true

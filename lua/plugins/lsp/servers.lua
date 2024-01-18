@@ -10,7 +10,7 @@ return {
 			"javascript",
 			"javascriptreact",
 			"less",
-			"sass",
+			"css",
 			"scss",
 			"typescriptreact",
 			"svelte",
@@ -109,4 +109,6 @@ return {
 	},
 
 	sqlls = {},
+
+	zls = {},
 }
