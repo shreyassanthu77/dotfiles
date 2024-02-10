@@ -5,6 +5,9 @@ return {
 		local oil = require("oil")
 		oil.setup({
 			skip_confirm_for_simple_edits = false,
+			view_options = {
+				show_hidden = true,
+			},
 		})
 		vim.keymap.set({ "n", "v" }, "<leader>e", oil.open, {
 			desc = "Open file explorer",

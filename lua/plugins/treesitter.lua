@@ -17,6 +17,7 @@ return {
 			"dart",
 			"go",
 			"templ",
+			"http",
 		},
 		auto_install = false,
 		highlight = { enable = true },

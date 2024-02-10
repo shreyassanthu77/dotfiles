@@ -2,13 +2,14 @@ local formatter = require("plugins/lsp/format")
 local on_attach = require("plugins/lsp/lsp_attach")
 
 return {
+	"stevearc/conform.nvim",
 	{
 		"neovim/nvim-lspconfig",
 		dependencies = {
 			{ "williamboman/mason.nvim", config = true },
 			"williamboman/mason-lspconfig.nvim",
 
-			{ "j-hui/fidget.nvim", opts = {} },
+			{ "j-hui/fidget.nvim",       opts = {} },
 
 			"folke/neodev.nvim",
 			"zbirenbaum/copilot.lua",
@@ -123,6 +124,7 @@ return {
 			vim.filetype.add({
 				extension = {
 					templ = "templ",
+					pcss = "css",
 				},
 			})
 		end,
