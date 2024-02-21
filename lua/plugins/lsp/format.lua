@@ -14,6 +14,7 @@ return {
 			svelte = { "prettierd" },
 			lua = { "stylua" },
 			python = { "black" },
+			ocaml = { "ocamlformat" },
 		},
 	},
 	config = function(conf)

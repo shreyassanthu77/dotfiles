@@ -109,6 +109,8 @@ return {
 		},
 	},
 
+	ocamllsp = {},
+
 	sqlls = {},
 
 	zls = {},

@@ -18,6 +18,7 @@ return {
 			"go",
 			"templ",
 			"http",
+			"ocaml",
 		},
 		auto_install = false,
 		highlight = { enable = true },
