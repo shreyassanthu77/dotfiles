@@ -19,6 +19,7 @@ return {
 			"templ",
 			"http",
 			"ocaml",
+			"vimdoc",
 		},
 		auto_install = false,
 		highlight = { enable = true },
