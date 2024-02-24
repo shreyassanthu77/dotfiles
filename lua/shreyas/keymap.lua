@@ -14,8 +14,8 @@ xmap("K", ":m '<-2<CR>gv=gv", "Move Selection up")
 
 nmap("U", "<C-r>", "Redo")
 
-nmap("<leader>p", [["+p]], "Paste from clipboard")
-nmap("<leader>P", [["+P]], "Paste from clipboard before cursor")
+xmap("<leader>p", [["+p]], "Paste from clipboard")
+xmap("<leader>P", [["+P]], "Paste from clipboard before cursor")
 vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]], { desc = "Copy to clipboard" })
 nmap("<leader>Y", [["+Y]], "Copy to clipboard until end of line")
 nmap("<leader>e", vim.cmd.Ex, "Open Netrw")

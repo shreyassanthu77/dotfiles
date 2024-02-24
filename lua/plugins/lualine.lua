@@ -9,7 +9,12 @@ return {
 			section_separators = { left = "", right = "" },
 		},
 		sections = {
-			lualine_c = { "buffers" },
+			lualine_c = { {
+				"buffers",
+				filetype_names = {
+					oil = "Files",
+				}
+			} },
 		},
 	},
 }
