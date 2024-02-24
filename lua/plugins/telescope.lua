@@ -15,7 +15,6 @@ return {
 		vim.keymap.set("n", "<leader>fl", builtin.live_grep, { desc = "Find in Files" })
 
 		-- other telescope commands
-		vim.keymap.set("n", "<leader>kb", builtin.keymaps, { desc = "Keymaps" })
 		vim.keymap.set("n", "<leader>df", builtin.diagnostics, { desc = "Diagnostics" })
 	end,
 }
