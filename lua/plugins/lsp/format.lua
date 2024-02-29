@@ -1,7 +1,7 @@
 return {
 	"stevearc/conform.nvim",
 	opts = {
-		format_on_save = { async = true, lsp_fallback = true },
+		-- format_on_save = { async = true, lsp_fallback = true },
 		formatters_by_ft = {
 			javascript = { { "deno_fmt", "prettierd" } },
 			javascriptreact = { { "deno_fmt", "prettierd" } },
@@ -20,7 +20,7 @@ return {
 	config = function(conf)
 		require("conform").setup(conf.opts)
 
-		vim.keymap.set("n", "<leader>f", function()
+		vim.keymap.set("n", "<leader>fm", function()
 			require("conform").format({ async = true, lsp_fallback = true })
 		end, { desc = "Format buffer" })
 	end,
