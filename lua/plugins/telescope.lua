@@ -14,7 +14,7 @@ return {
 		vim.keymap.set("n", ";", builtin.current_buffer_fuzzy_find, { desc = "Find in Current Buffer" })
 		vim.keymap.set("n", "<leader>fl", builtin.live_grep, { desc = "Find in Files" })
 
-		-- other telescope commands
-		vim.keymap.set("n", "<leader>df", builtin.diagnostics, { desc = "Diagnostics" })
+		-- open find files on startup
+		vim.schedule(builtin.find_files)
 	end,
 }
