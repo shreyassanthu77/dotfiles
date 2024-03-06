@@ -19,15 +19,14 @@ nmap("<leader>P", [["+P]], "Paste from clipboard before cursor")
 vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]], { desc = "Copy to clipboard" })
 nmap("<leader>Y", [["+Y]], "Copy to clipboard until end of line")
 nmap("<leader>e", vim.cmd.Ex, "Open Netrw")
+nmap("cit", [[f>lct<]], "Change inside tag")
 
 local function fmt_and_save()
 	vim.cmd.w()
 	require("conform").format({ async = true, lsp_fallback = true })
 end
 
-vim.keymap.set("n", "<A-s>", fmt_and_save, { desc = "Save file" })
-vim.keymap.set("i", "<A-s>", fmt_and_save, { desc = "Save file" })
-vim.keymap.set("v", "<A-s>", fmt_and_save, { desc = "Save file" })
+vim.keymap.set({ "n", "i", "v" }, "<A-s>", fmt_and_save, { desc = "Save file" })
 
 -- Highlight on yank
 vim.api.nvim_create_autocmd("TextYankPost", {
