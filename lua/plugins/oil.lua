@@ -8,6 +8,10 @@ return {
 			view_options = {
 				show_hidden = true,
 			},
+			columns = {
+				"icon",
+				"size",
+			}
 		})
 		vim.keymap.set({ "n", "v" }, "<leader>e", oil.open, {
 			desc = "Open file explorer",
