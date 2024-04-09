@@ -6,13 +6,16 @@ local function nmap(map, fn, desc)
 end
 
 local function xmap(map, fn, desc)
-	vim.keymap.set("x", map, fn, { desc = desc })
+	vim.keymap.set({ "v" }, map, fn, { desc = desc })
 end
 
 xmap("J", ":m '>+1<CR>gv=gv", "Move Selection down")
 xmap("K", ":m '<-2<CR>gv=gv", "Move Selection up")
 
 nmap("U", "<C-r>", "Redo")
+
+vim.keymap.set({ "n", "v" }, "<A-k>", "{", { desc = "Move to previous paragraph" })
+vim.keymap.set({ "n", "v" }, "<A-j>", "}", { desc = "Move to next paragraph" })
 
 nmap("<leader>p", [["+p]], "Paste from clipboard")
 nmap("<leader>P", [["+P]], "Paste from clipboard before cursor")
