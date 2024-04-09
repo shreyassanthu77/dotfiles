@@ -15,6 +15,8 @@ return {
 			lua = { "stylua" },
 			python = { "black" },
 			ocaml = { "ocamlformat" },
+			markdown = { "mdformat" },
+			templ = { "templ" }
 		},
 	},
 	config = function(conf)

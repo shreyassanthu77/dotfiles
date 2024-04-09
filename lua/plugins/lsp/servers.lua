@@ -1,5 +1,10 @@
+local zls_path = vim.fs.normalize("~/.local/bin/zls")
+
 return {
-	clangd = {},
+	clangd = {
+		-- root_dir = require("lspconfig.util").root_pattern(".clangd"),
+		single_file_support = true,
+	},
 	gopls = {},
 	pyright = {},
 	jsonls = {},
@@ -113,5 +118,7 @@ return {
 
 	sqlls = {},
 
-	zls = {},
+	zls = {
+		cmd = { zls_path }
+	},
 }
