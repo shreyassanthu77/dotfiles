@@ -9,6 +9,6 @@ dnf copr enable alternateved/keyd -y
 dnf install keyd -y
 # copy the config
 mkdir -p /etc/keyd/
-ln -s ./.config/keyd/default.conf /etc/keyd/default.conf
+ln -s ./.config/keyd/ /etc/keyd/
 # enable the service
 systemctl enable keyd
