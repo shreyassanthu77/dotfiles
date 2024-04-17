@@ -1,0 +1,14 @@
+#! /usr/bin/env sh
+
+# -e: exit on error
+# -X: print the command before executing it
+set -eX
+
+# install keyd
+dnf copr enable alternateved/keyd -y
+dnf install keyd -y
+# copy the config
+mkdir -p /etc/keyd/
+ln -s ./.config/keyd/default.conf /etc/keyd/default.conf
+# enable the service
+systemctl enable keyd
