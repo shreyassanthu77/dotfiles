@@ -14,4 +14,4 @@ sudo systemctl enable keyd
 
 
 # compile zoom utility
-$CC ./.config/hypr/scripts/zoom.c -O3 -s -o ./.config/hypr/scripts/zoom
+gcc ./.config/hypr/scripts/zoom.c -O3 -s -o ./.config/hypr/scripts/zoom
