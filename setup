@@ -2,7 +2,7 @@
 
 # -e: exit on error
 # -X: print the command before executing it
-set -eX
+set -ex
 
 # install keyd
 pacman -S keyd
