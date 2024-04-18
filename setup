@@ -5,12 +5,12 @@
 set -ex
 
 # install keyd
-pacman -Sy keyd
+sudo pacman -S keyd --noconfirm
 # copy the config
 mkdir -p /etc/keyd/
-ln -s ./.config/keyd/ /etc/keyd/
+sudo ln -s ./.config/keyd/ /etc/keyd/
 # enable the service
-systemctl enable keyd
+sudo systemctl enable keyd
 
 
 # compile zoom utility
