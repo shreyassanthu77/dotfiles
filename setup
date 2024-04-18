@@ -4,22 +4,11 @@
 # -X: print the command before executing it
 set -ex
 
-# install packages
-sudo pacman -S git zsh stow nautilus neovim sddm hyprland keyd --noconfirm
-
-# clone dotfiles
-DOTFILES_REPO=shreyassanthu77/nvim-config
-DOTFILES_DIR=~/dotfiles
-git clone https://github.com/$DOTFILES_REPO $DOTFILES_DIR
-
-# change directory
-cd $DOTFILES_DIR
-
 # install oh-my-zsh
 curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh > install.sh
 bash install.sh --unattended
-rm install.sh
-chsh -s /bin/zsh
+rm -f ~/.zshrc
+sudo chsh -s /usr/bin/zsh
 
 # install dotfiles
 stow .

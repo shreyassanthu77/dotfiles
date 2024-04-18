@@ -1,0 +1,31 @@
+#! /usr/bin/env sh
+
+# -e: exit on error
+# -X: print the command before executing it
+set -ex
+
+# install packages
+sudo pacman -S git \
+	zsh \
+	keyd \
+  stow \
+	neovim \
+	sddm \
+	hyprland \
+	swaybg \
+	wezterm \
+  nautilus \
+  --noconfirm
+
+sudo systemctl enable sddm
+
+# clone dotfiles
+DOTFILES_REPO=shreyassanthu77/nvim-config
+DOTFILES_DIR=~/dotfiles
+git clone https://github.com/$DOTFILES_REPO $DOTFILES_DIR
+
+# change directory
+cd $DOTFILES_DIR
+
+# run setup
+./setup.sh
