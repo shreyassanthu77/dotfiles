@@ -10,8 +10,14 @@ bash install.sh --unattended
 rm -f ~/.zshrc
 sudo chsh -s /usr/bin/zsh
 
+# install pkgx
+curl -Ssf https://pkgx.sh | bash
+
 # install dotfiles
 stow .
+
+# refresh font cache
+fc-cache -f -v
 
 # keyd setup
 mkdir -p /etc/keyd/
@@ -21,3 +27,5 @@ sudo systemctl enable keyd
 
 # compile zoom utility
 gcc ./.config/hypr/scripts/zoom.c -O3 -s -o ./.config/hypr/scripts/zoom
+
+reboot
