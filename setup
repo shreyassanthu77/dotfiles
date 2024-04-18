@@ -5,7 +5,7 @@
 set -ex
 
 # install keyd
-pacman -S keyd
+pacman -Sy keyd
 # copy the config
 mkdir -p /etc/keyd/
 ln -s ./.config/keyd/ /etc/keyd/
