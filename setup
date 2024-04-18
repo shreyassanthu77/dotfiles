@@ -5,10 +5,13 @@
 set -eX
 
 # install keyd
-dnf copr enable alternateved/keyd -y
-dnf install keyd -y
+pacman -S keyd
 # copy the config
 mkdir -p /etc/keyd/
 ln -s ./.config/keyd/ /etc/keyd/
 # enable the service
 systemctl enable keyd
+
+
+# compile zoom utility
+$CC ./.config/hypr/scripts/zoom.c -O3 -s -o ./.config/hypr/scripts/zoom
