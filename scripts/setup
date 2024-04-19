@@ -1,7 +1,16 @@
 #! /usr/bin/env sh
 
+# check if password is provided as an argument
+password=$1
+
+# prompt for password if not provided
+if [ -z $password ]
+then
+	read -sp "Enter password: " password
+fi
+
 # -e: exit on error
-# -X: print the command before executing it
+# -x: print the command before executing it
 set -ex
 
 # install oh-my-zsh
@@ -21,8 +30,8 @@ fc-cache -f -v
 
 # keyd setup
 mkdir -p /etc/keyd/
-sudo ln -s ~/.config/keyd /etc/keyd
-sudo systemctl enable keyd
+echo $password | sudo ln -s ~/.config/keyd /etc/keyd
+echo $password | sudo systemctl enable keyd
 
 
 # compile zoom utility

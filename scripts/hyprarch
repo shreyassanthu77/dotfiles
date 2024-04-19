@@ -1,11 +1,13 @@
 #! /usr/bin/env sh
 
+read -sp "Enter password: " password
+
 # -e: exit on error
-# -X: print the command before executing it
+# -x: print the command before executing it
 set -ex
 
 # install packages
-sudo pacman -S git \
+echo $password | sudo pacman -S git \
 	zsh \
 	keyd \
   stow \
@@ -18,7 +20,7 @@ sudo pacman -S git \
 	zoxide \
   --noconfirm
 
-sudo systemctl enable sddm
+echo $password | sudo systemctl enable sddm
 
 # clone dotfiles
 DOTFILES_REPO=shreyassanthu77/nvim-config
@@ -29,4 +31,4 @@ git clone https://github.com/$DOTFILES_REPO $DOTFILES_DIR
 cd $DOTFILES_DIR
 
 # run setup
-sudo ./scripts/setup
+./scripts/setup.sh $password
