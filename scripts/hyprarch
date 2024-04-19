@@ -22,7 +22,7 @@ sudo systemctl enable sddm
 
 # clone dotfiles
 DOTFILES_REPO=shreyassanthu77/nvim-config
-DOTFILES_DIR=~/dotfiles
+DOTFILES_DIR=dotfiles
 git clone https://github.com/$DOTFILES_REPO $DOTFILES_DIR
 
 # change directory
