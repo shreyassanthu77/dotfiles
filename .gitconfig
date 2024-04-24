@@ -1,0 +1,9 @@
+[credential "https://github.com"]
+	helper = !/home/shreyas/.local/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = !/home/shreyas/.local/bin/gh auth git-credential
+[user]
+	name = Shreyas Mididoddi
+	email = me@shreyascodes.tech
+[init]
+	defaultBranch = main
