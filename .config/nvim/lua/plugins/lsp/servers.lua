@@ -114,7 +114,7 @@ return {
 		},
 	},
 
-	ocamllsp = {},
+	-- ocamllsp = {},
 
 	sqlls = {},
 
