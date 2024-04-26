@@ -1,0 +1,10 @@
+@theme "Arc-Dark"
+
+
+inputbox {
+	font: "Geist Mono 20";
+}
+
+element-text {
+	font: "Geist Mono 20";
+}
