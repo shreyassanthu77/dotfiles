@@ -1,10 +1,7 @@
-@theme "Arc-Dark"
+@theme "/usr/share/rofi/themes/material.rasi"
 
-
-inputbox {
-	font: "Geist Mono 20";
-}
 
 element-text {
-	font: "Geist Mono 20";
+	font: "Geist Mono 15";
 }
+
