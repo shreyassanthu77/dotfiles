@@ -8,7 +8,7 @@ end
 
 config.check_for_updates = false
 config.show_update_window = false
-config.enable_wayland = false
+config.enable_wayland = true
 require("theme")(config)
 require("keymaps")(config)
 
