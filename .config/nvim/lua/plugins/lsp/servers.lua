@@ -117,8 +117,9 @@ return {
 	-- ocamllsp = {},
 
 	sqlls = {},
+	taplo = {},
 
 	zls = {
-		cmd = { zls_path }
+		cmd = { zls_path },
 	},
 }
