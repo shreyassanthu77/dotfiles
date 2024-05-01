@@ -1,7 +1,8 @@
-@theme "/usr/share/rofi/themes/material.rasi"
+configuration {
+	modes: [combi];
+	combi-modes: [ mymode, window, drun ];
 
-
-element-text {
-	font: "Geist Mono 15";
+	cycle: false;
 }
 
+@theme "./__config.rasi"

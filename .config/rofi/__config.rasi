@@ -1,0 +1,103 @@
+* {
+	bg-color: #10170f;
+	on-bg-color: #ffffff;
+	primary-color: #abcaa2;
+	on-primary-color: #000000;
+	secondary-color: #436b37;
+	on-secondary-color: #ffffff;
+	accent-color: #6cb258;
+	on-accent-color: #000000;
+
+	--font-normal: "Roboto 12";
+	--font-lg: "Roboto 16";
+
+	spacing: 0;
+	background-color: transparent;
+}
+
+window {
+	transparency: "real";
+	background-color: @bg-color;
+	border-radius: 10px;
+	padding: 10px;
+}
+
+mainbox {
+	children: [inputbar, message, listview];
+	border: 0px;
+	border-color: #120d16;
+}
+
+inputbar {
+	padding: 20px;
+	children: [entry];
+}
+
+prompt {
+	text-color: @on-bg-color;
+}
+
+entry {
+	font: @--font-lg;
+	text-color: @on-bg-color;
+	placeholder: "search...";
+	placeholder-color: @accent-color;
+}
+
+textbox {
+	font: @--font-normal;
+	text-color: @on-bg-color;
+	padding: 5px;
+}
+
+mode-switcher {
+	border-radius: 10px;
+}
+
+button {
+	background-color: @primary-color;
+	text-color: @on-primary-color;
+	font: @--font-normal;
+	padding: 5px;
+}
+
+button selected {
+	background-color: @secondary-color;
+	text-color: @on-secondary-color;
+}
+
+listview {
+	margin: 5px 0 0 0;
+	spacing: 5px;
+	lines: 6;
+	scrollbar: true;
+}
+
+scrollbar {
+	handle-color: @accent-color;
+	handle-width: 10px;
+	border-radius: 10px;
+}
+
+element {
+	highlight: bold underline;
+	children: [element-icon, element-text];
+	border: 0px;
+	background-color: @primary-color;
+	text-color: @on-primary-color;
+	border-radius: 10px;
+}
+
+element-text, element-icon {
+	padding: 5px;
+	font: @--font-lg;
+	border: 0px;
+	background-color: inherit;
+	text-color: inherit;
+}
+
+element selected {
+	background-color: @secondary-color;
+	text-color: @on-secondary-color;
+}
+
