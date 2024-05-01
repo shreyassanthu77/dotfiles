@@ -1,0 +1,29 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+add_newline = false
+format = """
+$time\
+$username\
+$directory\
+$git_branch\
+$git_commit\
+$git_status\
+$character
+"""
+
+right_format = """
+$cmd_duration
+"""
+
+[time]
+disabled = false
+format = "[$time]($style) "
+time_format = "%I:%M %p"
+style = "white"
+
+[character]
+success_symbol = '[➜](bold green)'
+error_symbol = "[➜](bold red)"
+
+[cmd_duration]
+disabled = false

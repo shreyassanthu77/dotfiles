@@ -4,10 +4,9 @@
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
-ZSH_THEME="robbyrussell"
-
 source $ZSH/oh-my-zsh.sh
 
+autoload -U +X compinit && compinit
 # Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR='vim'
@@ -72,5 +71,4 @@ export PATH=$PATH:$HOME/.cargo/bin
 
 eval "$(zoxide init --cmd cd zsh)"
 
-# opam configuration
-[[ ! -r /home/shreyas/.opam/opam-init/init.zsh ]] || source /home/shreyas/.opam/opam-init/init.zsh  > /dev/null 2> /dev/null
+eval "$(starship init zsh)"
