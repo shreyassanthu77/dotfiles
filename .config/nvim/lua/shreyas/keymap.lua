@@ -11,6 +11,10 @@ end
 
 vim.keymap.set("n", "j", "v:count ? 'j' : 'gj'", { expr = true, silent = true })
 vim.keymap.set("n", "k", "v:count ? 'k' : 'gk'", { expr = true, silent = true })
+nmap("<leader>ww", function()
+	vim.o.wrap = not vim.o.wrap
+end, "Toggle wrap")
+
 xmap("J", ":m '>+1<CR>gv=gv", "Move Selection down")
 xmap("K", ":m '<-2<CR>gv=gv", "Move Selection up")
 
