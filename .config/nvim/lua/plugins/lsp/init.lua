@@ -128,6 +128,7 @@ return {
 				extension = {
 					templ = "templ",
 					pcss = "css",
+					pest = "pest",
 				},
 			})
 		end,
