@@ -1,26 +1,19 @@
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
+source ~/.config/zsh/utils.zsh
+source ~/.config/zsh/zinit.zsh
+source ~/.config/zsh/prompt.zsh
+source ~/.config/zsh/config.zsh
 
-# Path to your oh-my-zsh installation.
-export ZSH="$HOME/.oh-my-zsh"
+alias r="source ~/.zshrc"
 
-source $ZSH/oh-my-zsh.sh
-
-autoload -U +X compinit && compinit
-# Preferred editor for local and remote sessions
-if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='vim'
-else
-  export EDITOR='nvim'
-fi
+alias ls="ls --color"
+alias l="ls -lah"
 
 alias time="/usr/bin/time"
-alias md="mkdir -p"
+function md() {
+	mkdir -p $@ && cd ${@:$#}
+}
 
-alias nv="nvim"
 alias v="nvim"
-alias vim="nvim"
-
 alias c="clear"
 
 alias g="git"
@@ -35,40 +28,30 @@ function gcp() {
 	git commit -m "$@"
 	git push
 }
+function gi() {
+	curl -sLw "\n" https://www.toptal.com/developers/gitignore/api/$@
+}
 
-source <(pkgx --shellcode)  #docs.pkgx.sh/shellcode
-source <(caddy completion zsh) # caddy server
 
-# openssl
-export LIBRARY_PATH=$HOME/.pkgx/openssl.org/v1.1.1w/lib
-export LD_LIBRARY_PATH=$HOME/.pkgx/openssl.org/v1.1.1w/lib
+# openssl for node js
+addlibpath $HOME/.pkgx/openssl.org/v1.1.1w/lib
 
-# go
 export GOPATH=$HOME/go
-export PATH=$PATH:$GOPATH/bin
-
-source <(go-blueprint completion zsh)
-
-# pnpm
 export PNPM_HOME="/home/shreyas/.local/share/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
-# pnpm end
 
-# add Pulumi to the PATH
-export PATH=$PATH:$HOME/.pulumi/bin
+PATHS=(
+	"$GOPATH/bin"
+	"$PNPM_HOME"
+	"$HOME/.pulumi/bin"
+	"$HOME/zig"
+	"$HOME/.cargo/bin"
+	"$HOME/.sst/bin"
+	"$HOME/.turso"
+)
 
-# add zip to the Path
-export PATH=$PATH:~/zig
+for p in $PATHS; do
+	addpath $p
+done
 
-# generate .gitignore
-function gi() { curl -sLw "\n" https://www.toptal.com/developers/gitignore/api/$@ ;}
-
-# cargo
-export PATH=$PATH:$HOME/.cargo/bin
-
-eval "$(zoxide init --cmd cd zsh)"
-
-eval "$(starship init zsh)"
+source <(pkgx --shellcode)
+source <(caddy completion zsh)

@@ -8,16 +8,7 @@ if [ -z $password ]
 then
 	read -sp "Enter password: " password
 fi
-
-# -e: exit on error
-# -x: print the command before executing it
 set -ex
-
-# install oh-my-zsh
-curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh > install.sh
-bash install.sh --unattended
-rm -f ~/.zshrc
-sudo chsh -s /usr/bin/zsh
 
 # install pkgx
 curl -Ssf https://pkgx.sh | bash
