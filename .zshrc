@@ -17,6 +17,7 @@ alias v="nvim"
 alias c="clear"
 
 alias g="git"
+alias gl="git log --oneline --decorate --all --graph"
 alias gs="git status"
 alias ga="git add"
 alias gaa="git add ."
