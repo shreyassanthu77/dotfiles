@@ -10,7 +10,7 @@ return {
 			json = { { "deno_fmt", "prettierd" } },
 			html = { "prettierd" },
 			css = { "prettierd" },
-			astro = { "prettierd" },
+			-- astro = { "prettierd" },
 			svelte = { "prettierd" },
 			lua = { "stylua" },
 			python = { "black" },
