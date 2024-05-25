@@ -5,4 +5,4 @@ configuration {
 	cycle: false;
 }
 
-@theme "./__config.rasi"
+@theme "./theme.rasi"
