@@ -6,7 +6,7 @@ return {
 			javascript = { { "deno_fmt", "prettierd" } },
 			javascriptreact = { { "deno_fmt", "prettierd" } },
 			typescript = { { "deno_fmt", "prettierd" } },
-			typescriptReact = { { "deno_fmt", "prettierd" } },
+			typescriptreact = { { "deno_fmt", "prettierd" } },
 			json = { { "deno_fmt", "prettierd" } },
 			html = { "prettierd" },
 			css = { "prettierd" },
