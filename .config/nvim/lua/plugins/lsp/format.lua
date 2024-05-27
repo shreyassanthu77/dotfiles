@@ -8,6 +8,7 @@ return {
 			typescript = { { "deno_fmt", "prettierd" } },
 			typescriptreact = { { "deno_fmt", "prettierd" } },
 			json = { { "deno_fmt", "prettierd" } },
+			jsonc = { { "deno_fmt", "prettierd" } },
 			html = { "prettierd" },
 			css = { "prettierd" },
 			-- astro = { "prettierd" },
