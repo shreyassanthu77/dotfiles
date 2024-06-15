@@ -12,7 +12,7 @@ void printHelp(char *name) {
 
 const char *STATE_FILE = "/tmp/zoom_state";
 const float ZOOM_STEP = 0.2;
-const char ZOOM_CMD[] = "hyprctl keyword misc:cursor_zoom_factor %.2f";
+const char ZOOM_CMD[] = "hyprctl keyword cursor:zoom_factor %.2f";
 const size_t ZOOM_CMD_SIZE = sizeof(ZOOM_CMD);
 
 typedef struct {
