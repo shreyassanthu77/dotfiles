@@ -1,4 +1,4 @@
-local function on_attach(_, bufnr)
+local function on_attach(client, bufnr)
 	local trouble = require("trouble")
 
 	local nmap = function(keys, func, desc)
@@ -32,6 +32,17 @@ local function on_attach(_, bufnr)
 	nmap("<leader>wl", function()
 		print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
 	end, "[W]orkspace [L]ist Folders")
+
+
+	if client.server_capabilities.inlayHintProvider then
+		nmap("<leader>hl", function()
+			if vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }) then
+				vim.lsp.inlay_hint.enable(false, { bufnr = bufnr })
+			else
+				vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+			end
+		end, "Toggle Inlay Hints")
+	end
 end
 
 return on_attach

@@ -89,6 +89,20 @@ return {
 	tsserver = {
 		root_dir = require("lspconfig.util").root_pattern("package.json"),
 		single_file_support = false,
+		settings = {
+			typescript = {
+				inlayHints = {
+					includeInlayParameterNameHints = 'all',
+					includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+					includeInlayFunctionParameterTypeHints = true,
+					includeInlayVariableTypeHints = true,
+					includeInlayVariableTypeHintsWhenTypeMatchesName = false,
+					includeInlayPropertyDeclarationTypeHints = true,
+					includeInlayFunctionLikeReturnTypeHints = true,
+					includeInlayEnumMemberValueHints = true,
+				}
+			},
+		},
 	},
 	denols = {
 		root_dir = require("lspconfig.util").root_pattern("deno.json", "deno.jsonc"),
