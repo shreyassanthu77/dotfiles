@@ -1,0 +1,120 @@
+keybinds clear-defaults=true {
+	normal {
+		bind "Ctrl g" { SwitchToMode "locked";  }
+		bind "Ctrl s" { SwitchToMode "session"; }
+		bind "Ctrl a" { SwitchToMode "pane";    }
+		bind "Alt N"  { NewTab;                 }
+		bind "Alt n"  { GoToTab 1;              }
+		bind "Alt i"  { GoToTab 2;              }
+		bind "Alt o"  { GoToTab 3;              }
+		bind "Alt ;"  { GoToTab 4;              }
+	}
+	pane {
+		bind "a" 		 			 { Write     0x01;        }
+		bind "Ctrl a" 		 { Write     0x01;        SwitchToMode "normal"; }
+		bind "H"           { NewPane   "Left";      SwitchToMode "normal"; }
+		bind "J"           { NewPane   "Down";      SwitchToMode "normal"; }
+		bind "K"           { NewPane   "Up";        SwitchToMode "normal"; }
+		bind "L"           { NewPane   "Right";     SwitchToMode "normal"; }
+		bind "h"           { MoveFocus "Left";      SwitchToMode "normal"; }
+		bind "j"           { MoveFocus "Down";      SwitchToMode "normal"; }
+		bind "k"           { MoveFocus "Up";        SwitchToMode "normal"; }
+		bind "l"           { MoveFocus "Right";     SwitchToMode "normal"; }
+		bind "Ctrl h"      { Resize    "Left";      SwitchToMode "normal"; }
+		bind "Ctrl j"      { Resize    "Down";      SwitchToMode "normal"; }
+		bind "Ctrl k"      { Resize    "Up";        SwitchToMode "normal"; }
+		bind "Ctrl l"      { Resize    "Right";     SwitchToMode "normal"; }
+		bind "f"           { ToggleFocusFullscreen; SwitchToMode "locked"; }
+		bind "F"           { ToggleFloatingPanes;   SwitchToMode "normal"; }
+		bind "Enter" "Esc" { SwitchToMode "normal"; }
+	}
+
+	locked {
+		bind "Ctrl g" { SwitchToMode "normal"; }
+	}
+
+	session {
+		bind "d" { Detach; }
+		bind "Enter" "Esc" { SwitchToMode "normal"; }
+	}
+}
+
+plugins {
+    // tab-bar location="zellij:tab-bar"
+    // status-bar location="zellij:status-bar"
+    // strider location="zellij:strider"
+    // compact-bar location="zellij:compact-bar"
+    // welcome-screen location="zellij:session-manager" {
+    //     welcome_screen true
+    // }
+    // filepicker location="zellij:strider" {
+    //     cwd "/"
+    // }
+}
+
+on_force_close "detach"
+pane_frames false
+// theme "One Half Dark"
+default_layout "layout"
+default_mode "normal"
+mouse_mode true
+mirror_session true
+session_serialization true
+pane_viewport_serialization true
+// Configure the scroll back buffer size
+// This is the number of lines zellij stores for each pane in the scroll back
+// buffer. Excess number of lines are discarded in a FIFO fashion.
+// Valid values: positive integers
+// Default value: 10000
+//
+// scroll_buffer_size 10000
+
+// Provide a command to execute when copying text. The text will be piped to
+// the stdin of the program to perform the copy. This can be used with
+// terminal emulators which do not support the OSC 52 ANSI control sequence
+// that will be used by default if this option is not set.
+// Examples:
+//
+// copy_command "xclip -selection clipboard" // x11
+// copy_command "wl-copy"                    // wayland
+// copy_command "pbcopy"                     // osx
+
+// Choose the destination for copied text
+// Allows using the primary selection buffer (on x11/wayland) instead of the system clipboard.
+// Does not apply when using copy_command.
+// Options:
+//   - system (default)
+//   - primary
+//
+// copy_clipboard "primary"
+
+// Enable or disable automatic copy (and clear) of selection when releasing mouse
+// Default: true
+//
+// copy_on_select false
+
+// Path to the default editor to use to edit pane scrollbuffer
+// Default: $EDITOR or $VISUAL
+//
+// scrollback_editor "/usr/bin/vim"
+
+
+// The folder in which Zellij will look for layouts
+//
+// layout_dir "/path/to/my/layout_dir"
+
+// The folder in which Zellij will look for themes
+//
+// theme_dir "/path/to/my/theme_dir"
+
+// Enable or disable the rendering of styled and colored underlines (undercurl).
+// May need to be disabled for certain unsupported terminals
+// Default: true
+//
+// styled_underlines false
+
+// Enable or disable writing of session metadata to disk (if disabled, other sessions might not know
+// metadata info on this session)
+// Default: false
+//
+// disable_session_metadata true

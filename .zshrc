@@ -5,6 +5,29 @@ source ~/.config/zsh/config.zsh
 
 alias r="source ~/.zshrc"
 
+alias z="zellij"
+function za() {
+	wd=$(pwd)
+	if [ "$wd" = "$HOME" ]; then
+		base="home"
+	else
+		base=$(basename $wd)
+	fi
+	zsessions=$(zellij ls -sn 2> /dev/null)
+	if [ -z "$zsessions" ]; then
+		zellij -s $base
+		return
+	fi
+	new_session="New Session"
+	selected_session=$(echo $new_session'\n'$zsessions | fzf)
+	if [ "$selected_session" = "$new_session" ]; then
+		zellij -s $base
+	else
+		zellij attach $selected_session
+	fi
+	return
+}
+
 alias ls="ls --color"
 alias l="ls -lah"
 
@@ -33,6 +56,8 @@ function gi() {
 	curl -sLw "\n" https://www.toptal.com/developers/gitignore/api/$@
 }
 
+# libpython for python
+addlibpath $HOME/.pkgx/python.org/v\*/lib
 
 # openssl for node js
 addlibpath $HOME/.pkgx/openssl.org/v1.1.1w/lib
