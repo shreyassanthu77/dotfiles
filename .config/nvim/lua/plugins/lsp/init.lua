@@ -1,4 +1,5 @@
 local formatter = require("plugins/lsp/format")
+local debugger = require("plugins/lsp/debugger")
 local on_attach = require("plugins/lsp/lsp_attach")
 
 return {
@@ -135,4 +136,5 @@ return {
 		end,
 	},
 	formatter,
+	debugger,
 }

@@ -4,6 +4,7 @@ return {
 	clangd = {
 		-- root_dir = require("lspconfig.util").root_pattern(".clangd"),
 		single_file_support = true,
+		filetypes = { "c", "cpp", "objc", "objcpp", "cuda" }
 	},
 	gopls = {},
 	pyright = {},
