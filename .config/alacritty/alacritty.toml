@@ -1,0 +1,51 @@
+[terminal]
+osc52 = "CopyPaste"
+
+[font]
+size = 20
+normal.family = "Geist Mono"
+offset.y = 4
+glyph_offset.y = 3
+
+[window]
+decorations = "none"
+opacity = 0.75
+padding = { x = 0, y = 0 }
+dynamic_padding = false
+
+[colors]
+cursor = { cursor = "#52AD70", text = "#000000" }
+
+[colors.primary]
+background = "#000000"
+foreground = "#A2A2A2"
+
+[colors.normal]
+black = "#000000"
+red = "#ee5555"
+green = "#55ee55"
+yellow = "#eded55"
+blue = "#5555ee"
+magenta = "#ee55ee"
+cyan = "#55eeee"
+white = "#ffffff"
+
+[colors.bright]
+black = "#555555"
+red = "#ff5555"
+green = "#55ff55"
+yellow = "#ffff55"
+blue = "#5555ff"
+magenta = "#ff55ff"
+cyan = "#55ffff"
+white = "#ffffff"
+
+[colors.dim]
+black = "#555555"
+red = "#aa5555"
+green = "#55aa55"
+yellow = "#aaaa55"
+blue = "#5555aa"
+magenta = "#aa55aa"
+cyan = "#55aaaa"
+white = "#aaaaaa"
