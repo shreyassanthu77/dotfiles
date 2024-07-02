@@ -3,10 +3,10 @@ return {
 	opts = {
 		-- format_on_save = { async = true, lsp_fallback = true },
 		formatters_by_ft = {
-			javascript = { { "deno_fmt", "prettierd" } },
-			javascriptreact = { { "deno_fmt", "prettierd" } },
-			typescript = { { "deno_fmt", "prettierd" } },
-			typescriptreact = { { "deno_fmt", "prettierd" } },
+			javascript = { "prettierd" },
+			javascriptreact = { "prettierd" },
+			typescript = { "prettierd" },
+			typescriptreact = { "prettierd" },
 			json = { { "deno_fmt", "prettierd" } },
 			jsonc = { { "deno_fmt", "prettierd" } },
 			html = { "prettierd" },
