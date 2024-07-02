@@ -27,6 +27,7 @@ keybinds clear-defaults=true {
 		bind "f"           { ToggleFocusFullscreen; SwitchToMode "locked"; }
 		bind "F"           { ToggleFloatingPanes;   SwitchToMode "normal"; }
 		bind "Enter" "Esc" { SwitchToMode "normal"; }
+		bind "w"        	 { CloseFocus;            SwitchToMode "normal"; }
 	}
 
 	locked {
