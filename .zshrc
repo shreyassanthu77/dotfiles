@@ -56,23 +56,22 @@ function gi() {
 	curl -sLw "\n" https://www.toptal.com/developers/gitignore/api/$@
 }
 
-# libpython for python
-addlibpath $HOME/.pkgx/python.org/v\*/lib
-
 # openssl for node js
 addlibpath $HOME/.pkgx/openssl.org/v1.1.1w/lib
 
 export GOPATH=$HOME/go
 export PNPM_HOME="/home/shreyas/.local/share/pnpm"
 
+export CHROME_EXECUTABLE=$(which microsoft-edge-dev)
 PATHS=(
 	"$GOPATH/bin"
 	"$PNPM_HOME"
 	"$HOME/.pulumi/bin"
-	"$HOME/zig"
 	"$HOME/.cargo/bin"
 	"$HOME/.sst/bin"
 	"$HOME/.turso"
+	"$HOME/flutter/bin"
+	"$HOME/Android/Sdk/platform-tools"
 )
 
 for p in $PATHS; do
