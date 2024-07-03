@@ -78,5 +78,17 @@ for p in $PATHS; do
 	addpath $p
 done
 
+# zig version manager
+if [ ! -d "$HOME/.zvm" ]; then
+	echo "Zig Version Manager not installed. Do you want to install it? (y/n)"
+	read -q
+	echo "Installing Zig Version Manager..."
+	curl https://raw.githubusercontent.com/tristanisham/zvm/master/install.sh | bash
+fi
+export ZVM_INSTALL="$HOME/.zvm/self"
+addpath $HOME/.zvm/bin
+addpath $ZVM_INSTALL
+
+
 source <(pkgx --shellcode)
 source <(caddy completion zsh)
