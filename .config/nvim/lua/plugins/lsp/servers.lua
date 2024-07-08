@@ -1,4 +1,4 @@
-local zls_path = vim.fs.normalize("~/.local/bin/zls")
+local zls_path = vim.fs.normalize("~/.zvm/bin/zls")
 
 return {
 	clangd = {
