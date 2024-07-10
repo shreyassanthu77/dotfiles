@@ -1,9 +1,12 @@
 const entry = App.configDir + "/src/config.ts";
 const outdir = "/tmp/ags/js";
 
+const username = Utils.exec("whoami").trim();
+const home = `/home/${username}`;
+const bun = `${home}/.local/bin/bun`;
 try {
-  await Utils.execAsync([
-    "bun",
+  Utils.exec([
+    bun,
     "build",
     entry,
     "--outdir",

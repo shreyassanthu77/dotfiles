@@ -187,19 +187,12 @@ export function Notifications(monitor: number) {
 
   return Widget.Window({
     monitor,
+    visible: notifications.bind("notifications").as((n) => n.length > 0),
     name: "notification",
-    anchor: ["top", "right"],
+    anchor: ["right"],
     css: `
-			min-width: 2px;
-			min-height: 2px;
 			background-color: rgba(0, 0, 0, 0);
 		`,
-    child: Widget.Scrollable({
-      css: `
-				min-width: 500px;
-				min-height: 1080px;
-			`,
-      child: list,
-    }),
+    child: list,
   });
 }

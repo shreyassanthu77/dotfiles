@@ -8,7 +8,7 @@ function Widgets(monitor: number) {
     name: "widgets",
     anchor: ["bottom", "right"],
     css: "background-color: rgba(0, 0, 0, 0);",
-    layer: "overlay",
+    expand: false,
     child: Widget.Box({
       css: `
 				padding: 2rem;
