@@ -41,6 +41,7 @@ keybinds clear-defaults=true {
 }
 
 plugins {
+		zessman location="file:~/.config/zellij/plugins/zessman.wasm"
     // tab-bar location="zellij:tab-bar"
     // status-bar location="zellij:status-bar"
     // strider location="zellij:strider"

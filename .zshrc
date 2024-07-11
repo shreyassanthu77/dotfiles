@@ -2,31 +2,9 @@ source ~/.config/zsh/utils.zsh
 source ~/.config/zsh/zinit.zsh
 source ~/.config/zsh/prompt.zsh
 source ~/.config/zsh/config.zsh
+source ~/.config/zsh/zellij.zsh
 
 alias r="source ~/.zshrc"
-
-alias z="zellij"
-function za() {
-	wd=$(pwd)
-	if [ "$wd" = "$HOME" ]; then
-		base="home"
-	else
-		base=$(basename $wd)
-	fi
-	zsessions=$(zellij ls -sn 2> /dev/null)
-	if [ -z "$zsessions" ]; then
-		zellij -s $base
-		return
-	fi
-	new_session="New Session"
-	selected_session=$(echo $new_session'\n'$zsessions | fzf)
-	if [ "$selected_session" = "$new_session" ]; then
-		zellij -s $base
-	else
-		zellij attach $selected_session
-	fi
-	return
-}
 
 alias ls="ls --color"
 alias l="ls -lah"
