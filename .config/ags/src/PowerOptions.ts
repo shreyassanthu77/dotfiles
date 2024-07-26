@@ -15,7 +15,12 @@ export function PowerOptions() {
 					background: ${theme.secondary_color};
 					border-radius: 10px; 
 			`,
-      onClicked,
+      onClicked() {
+        setTimeout(() => {
+          App.closeWindow("widgets");
+        }, 0);
+        onClicked();
+      },
       child: Widget.Box({
         spacing: 10,
         children: [
@@ -49,7 +54,9 @@ export function PowerOptions() {
       Button("Restart", "view-refresh", () => {
         Utils.execAsync("systemctl reboot");
       }),
-      Button("Shutdown", "system-shutdown", () => {}),
+      Button("Shutdown", "system-shutdown", () => {
+        Utils.execAsync("systemctl poweroff");
+      }),
     ],
   });
 }
