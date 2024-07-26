@@ -40,8 +40,8 @@ export function Audio() {
           drawValue: false,
           css: `
 						padding: 2px 0;
-						outline: none;
 						border: none;
+						outline-color: ${theme.on_secondary_color}
 					`,
           onChange({ value }) {
             stream.volume = value / 100;
@@ -165,8 +165,8 @@ export function Media() {
         Widget.Slider({
           css: `
 						padding: 2px 0;
-						outline: none;
 						border: none;
+						outline-color: ${theme.on_secondary_color}
 					`,
           draw_value: false,
           on_change: ({ value }) => (player.position = value * player.length),
@@ -214,7 +214,11 @@ export function Media() {
       children: [
         Widget.Box({ hexpand: true }),
         Widget.Button({
-          css: `padding: .5rem .7rem;`,
+          css: `
+						padding: .5rem .7rem; 
+						outline-width: 2px;
+						outline-style: solid;
+						outline-color: ${theme.on_secondary_color};`,
           onClicked: () => player.previous(),
           child: Widget.Icon({
             icon: "media-skip-backward-symbolic",
@@ -225,7 +229,9 @@ export function Media() {
 						padding: .5rem .7rem;
 						background: ${theme.accent_color};
 						color: ${theme.on_accent_color};
-					`,
+						outline-width: 2px;
+						outline-style: solid;
+						outline-color: ${theme.on_secondary_color};`,
           onClicked: () => player.playPause(),
           child: Widget.Icon({
             icon: player.bind("play_back_status").as((status) => {
@@ -241,7 +247,10 @@ export function Media() {
           }),
         }),
         Widget.Button({
-          css: `padding: .5rem .7rem;`,
+          css: `padding: .5rem .7rem;
+						outline-width: 2px;
+						outline-style: solid;
+						outline-color: ${theme.on_secondary_color};`,
           onClicked: () => player.next(),
           child: Widget.Icon({
             icon: "media-skip-forward-symbolic",
