@@ -3,6 +3,8 @@ import { Audio, Media } from "./Media";
 import { Notifications, notificationFadeOutMs } from "./Notifications";
 import { PowerOptions } from "./PowerOptions";
 
+App.addIcons(`${App.configDir}/assets`);
+
 function Widgets(monitor: number) {
   const visible = Variable(false);
   return Widget.Window({

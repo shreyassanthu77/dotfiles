@@ -45,17 +45,17 @@ export function PowerOptions() {
     vpack: "end",
     spacing: 10,
     children: [
+      Button("Sleep", "moon", () => {
+        Utils.execAsync("systemctl suspend");
+      }),
       Button("Hibernate", "media-playback-pause", () => {
         Utils.execAsync("systemctl hibernate");
       }),
-      Button("Lock", "system-lock-screen", () => {
-        Utils.execAsync("hyprctl dispatch exit");
+      Button("Shutdown", "system-shutdown", () => {
+        Utils.execAsync("systemctl poweroff");
       }),
       Button("Restart", "view-refresh", () => {
         Utils.execAsync("systemctl reboot");
-      }),
-      Button("Shutdown", "system-shutdown", () => {
-        Utils.execAsync("systemctl poweroff");
       }),
     ],
   });
