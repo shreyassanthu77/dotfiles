@@ -28,6 +28,17 @@ keybinds clear-defaults=true {
 		bind "F"           { ToggleFloatingPanes;   SwitchToMode "normal"; }
 		bind "Enter" "Esc" { SwitchToMode "normal"; }
 		bind "w"        	 { CloseFocus;            SwitchToMode "normal"; }
+
+		bind "1"           { GoToTab 1; }
+		bind "2"           { GoToTab 2; }
+		bind "3"           { GoToTab 3; }
+		bind "4"           { GoToTab 4; }
+		bind "5"           { GoToTab 5; }
+		bind "6"           { GoToTab 6; }
+		bind "7"           { GoToTab 7; }
+		bind "8"           { GoToTab 8; }
+		bind "9"           { GoToTab 9; }
+		bind "0"           { GoToTab 10; }
 	}
 
 	locked {

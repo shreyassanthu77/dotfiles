@@ -18,7 +18,13 @@ local function on_attach(client, bufnr)
 	nmap("<leader>D", vim.lsp.buf.type_definition, "Type [D]efinition")
 	nmap("<leader>ds", require("telescope.builtin").lsp_document_symbols, "[D]ocument [S]ymbols")
 	nmap("<leader>ws", require("telescope.builtin").lsp_dynamic_workspace_symbols, "[W]orkspace [S]ymbols")
-	nmap("<leader>dd", trouble.toggle, "[D]iagnostic [D]etails")
+	nmap("<leader>dd", function()
+		trouble.toggle({
+			mode = "diagnostics",
+			focus = true,
+			auto_close = true,
+		})
+	end, "[D]iagnostic [D]etails")
 	nmap("<leader>dp", vim.diagnostic.goto_prev, "[D]iagnostic [P]revious")
 	nmap("<leader>dn", vim.diagnostic.goto_next, "[D]iagnostic [N]ext")
 	nmap("<leader>dl", vim.diagnostic.open_float, "[D]iagnostic [L]ist")

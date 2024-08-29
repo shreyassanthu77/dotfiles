@@ -1,6 +1,7 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
+
 local function nmap(map, fn, desc)
 	vim.keymap.set("n", map, fn, { desc = desc })
 end
