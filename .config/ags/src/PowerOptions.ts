@@ -10,6 +10,7 @@ export function PowerOptions() {
   function Button(label: string, icon: string, onClicked: () => void) {
     return Widget.Button({
       className: "power-button",
+      borderWidth: 0,
       css: `
 					padding: 1rem 1.25rem;
 					background: ${theme.secondary_color};
@@ -27,9 +28,15 @@ export function PowerOptions() {
           Widget.Icon({
             icon,
             size: 24,
+            css: `
+							color: ${theme.on_secondary_color};
+						`,
           }),
           Widget.Label({
             label,
+            css: `
+							color: ${theme.on_secondary_color};
+						`,
           }),
         ],
       }),
@@ -46,10 +53,18 @@ export function PowerOptions() {
     spacing: 10,
     children: [
       Button("Sleep", "moon", () => {
-        Utils.execAsync("systemctl suspend");
+        Utils.execAsync([
+          "/bin/bash",
+          "-c",
+          "hyprlock & sleep 1 && systemctl hybrid-sleep",
+        ]);
       }),
       Button("Hibernate", "media-playback-pause", () => {
-        Utils.execAsync("systemctl hibernate");
+        Utils.execAsync([
+          "/bin/bash",
+          "-c",
+          "hyprlock & sleep 1 && systemctl hibernate",
+        ]);
       }),
       Button("Shutdown", "system-shutdown", () => {
         Utils.execAsync("systemctl poweroff");
