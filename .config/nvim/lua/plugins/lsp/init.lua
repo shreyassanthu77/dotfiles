@@ -40,19 +40,35 @@ return {
 			local mason_lspconfig = require("mason-lspconfig")
 			local servers = require("plugins/lsp/servers")
 
+			local ensure_installed = {}
+			local local_servers = {}
+			for server_name, server in pairs(servers) do
+				if server.cmd == nil then
+					table.insert(ensure_installed, server_name)
+				else
+					table.insert(local_servers, server_name)
+				end
+			end
 			mason_lspconfig.setup({
-				ensure_installed = vim.tbl_keys(servers),
+				ensure_installed = ensure_installed,
 			})
 
+			local function setup_server(server_name)
+				local setup_opts = vim.tbl_extend("force", {
+					capabilities = capabilities,
+					on_attach = on_attach,
+				}, servers[server_name])
+				require("lspconfig")[server_name].setup(setup_opts)
+			end
+
 			mason_lspconfig.setup_handlers({
-				function(server_name)
-					local setup_opts = vim.tbl_extend("force", {
-						capabilities = capabilities,
-						on_attach = on_attach,
-					}, servers[server_name])
-					require("lspconfig")[server_name].setup(setup_opts)
-				end,
+				setup_server
 			})
+
+			for _, server_name in ipairs(local_servers) do
+				setup_server(server_name)
+			end
+
 
 
 			local cmp = require("cmp")
@@ -131,6 +147,7 @@ return {
 					templ = "templ",
 					pcss = "css",
 					pest = "pest",
+					ml = "ocaml",
 				},
 			})
 		end,

@@ -129,7 +129,9 @@ return {
 		},
 	},
 
-	-- ocamllsp = {},
+	ocamllsp = {
+		cmd = { "ocamllsp" },
+	},
 
 	sqlls = {},
 	taplo = {},
