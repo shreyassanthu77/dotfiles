@@ -87,8 +87,14 @@ return {
 	rust_analyzer = {},
 	templ = {},
 	dockerls = {},
-	tsserver = {
-		root_dir = require("lspconfig.util").root_pattern("package.json"),
+	ts_ls = {
+		root_dir = function(startpath)
+			local util = require("lspconfig.util")
+			local p = util.root_pattern("package.json")(startpath)
+			if p ~= nil and not util.path.exists(p .. "/deno.json") then
+				return p
+			end
+		end,
 		single_file_support = false,
 		settings = {
 			typescript = {

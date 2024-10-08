@@ -13,7 +13,6 @@ return {
 			{ "j-hui/fidget.nvim",       opts = {} },
 
 			"folke/neodev.nvim",
-			"zbirenbaum/copilot.lua",
 			"folke/trouble.nvim",
 
 			-- Cmp Stuff
@@ -117,7 +116,6 @@ return {
 					{ name = "luasnip" },
 					{ name = "path" },
 					{ name = "buffer" },
-					-- { name = "copilot" },
 				},
 				completion = {
 					autocomplete = {
@@ -126,21 +124,6 @@ return {
 				},
 			})
 
-			require("copilot").setup({
-				panel = { enabled = false },
-				suggestion = {
-					auto_trigger = true,
-					keymap = {
-						next = "<A-j>",
-						accept = "<A-a>",
-						dismiss = "<A-d>",
-					},
-				},
-				filetypes = {
-					markdown = true,
-					yaml = true,
-				},
-			})
 
 			vim.filetype.add({
 				extension = {
