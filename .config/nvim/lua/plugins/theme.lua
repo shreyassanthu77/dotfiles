@@ -17,4 +17,14 @@ return {
 			vim.cmd.TransparentEnable()
 		end,
 	},
+	{
+		'marko-cerovac/material.nvim',
+		config = function()
+			local material = require('material')
+			vim.g.material_style = 'deep ocean'
+			material.setup({
+				lualine_style = "stealth",
+			})
+		end
+	},
 }
