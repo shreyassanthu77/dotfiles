@@ -128,6 +128,7 @@ return {
 	},
 	-- dartls = {},
 
+	prismals = {},
 	lua_ls = {
 		Lua = {
 			workspace = { checkThirdParty = false },

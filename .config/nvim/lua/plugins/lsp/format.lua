@@ -17,14 +17,14 @@ return {
 			python = { "black" },
 			ocaml = { "ocamlformat" },
 			markdown = { "mdformat" },
-			templ = { "templ" }
+			templ = { "templ" },
 		},
 	},
 	config = function(conf)
 		require("conform").setup(conf.opts)
 
 		vim.keymap.set("n", "<leader>fm", function()
-			require("conform").format({ async = true, lsp_fallback = true })
+			require("conform").format({ lsp_format = "prefer" })
 		end, { desc = "Format buffer" })
 	end,
 }
