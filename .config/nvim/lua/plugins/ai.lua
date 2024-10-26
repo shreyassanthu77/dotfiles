@@ -2,36 +2,36 @@ return {
 	{
 		"supermaven-inc/supermaven-nvim",
 		config = function()
-			require("supermaven-nvim").setup({
-				log_level = "off",
-				disable_keymaps = false,
-				keymaps = {
-					accept_suggestion = "<A-a>",
-					accept_word = "<A-w>",
-					clear_suggestion = "<A-d>",
-				},
-			})
+			-- require("supermaven-nvim").setup({
+			-- 	log_level = "off",
+			-- 	disable_keymaps = false,
+			-- 	keymaps = {
+			-- 		accept_suggestion = "<A-a>",
+			-- 		accept_word = "<A-w>",
+			-- 		clear_suggestion = "<A-d>",
+			-- 	},
+			-- })
 		end,
 	},
 	{
 
 		"zbirenbaum/copilot.lua",
 		config = function()
-			-- require("copilot").setup({
-			-- 	panel = { enabled = false },
-			-- 	suggestion = {
-			-- 		auto_trigger = true,
-			-- 		keymap = {
-			-- 			next = "<A-j>",
-			-- 			accept = "<A-a>",
-			-- 			dismiss = "<A-d>",
-			-- 		},
-			-- 	},
-			-- 	filetypes = {
-			-- 		markdown = true,
-			-- 		yaml = true,
-			-- 	},
-			-- })
+			require("copilot").setup({
+				panel = { enabled = false },
+				suggestion = {
+					auto_trigger = true,
+					keymap = {
+						next = "<A-j>",
+						accept = "<A-a>",
+						dismiss = "<A-d>",
+					},
+				},
+				filetypes = {
+					markdown = true,
+					yaml = true,
+				},
+			})
 		end
 	},
 	{
