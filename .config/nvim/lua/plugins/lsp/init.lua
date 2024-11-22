@@ -1,4 +1,5 @@
 local formatter = require("plugins/lsp/format")
+local flutter = require("plugins/lsp/flutter")
 local debugger = require("plugins/lsp/debugger")
 local on_attach = require("plugins/lsp/lsp_attach")
 
@@ -30,10 +31,24 @@ return {
 			require("neodev").setup()
 
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
-			capabilities.textDocument.foldingRange = {
-				dynamicRegistration = false,
-				lineFoldingOnly = true,
+			local overrides = {
+				workspace = {
+					didChangeWatchedFiles = {
+						dynamicRegistration = true,
+					},
+				},
+				textDocument = {
+					foldingRange = {
+						dynamicRegistration = false,
+						lineFoldingOnly = true,
+					},
+				}
 			}
+			capabilities = vim.tbl_deep_extend("keep", capabilities, overrides)
+			-- capabilities.textDocument.foldingRange = {
+			-- 	dynamicRegistration = false,
+			-- 	lineFoldingOnly = true,
+			-- }
 			capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
 
 			local mason_lspconfig = require("mason-lspconfig")
@@ -136,5 +151,6 @@ return {
 		end,
 	},
 	formatter,
+	flutter,
 	debugger,
 }

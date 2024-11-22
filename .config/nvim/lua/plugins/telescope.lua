@@ -6,7 +6,19 @@ return {
 	},
 	config = function()
 		local telescope = require("telescope")
-		telescope.setup({})
+		telescope.setup({
+			defaults = {
+				winblend = vim.g.neovide and 80 or 0,
+			},
+			pickers = {
+				find_files = {
+					hidden = true,
+				},
+				live_grep = {
+					hidden = true,
+				}
+			},
+		})
 
 		local builtin = require("telescope.builtin")
 		vim.keymap.set("n", "<leader>ff", builtin.buffers, { desc = "Find Open Files" })

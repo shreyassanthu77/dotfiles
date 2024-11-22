@@ -1,7 +1,6 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
-
 local function nmap(map, fn, desc)
 	vim.keymap.set("n", map, fn, { desc = desc })
 end
@@ -9,6 +8,28 @@ end
 local function xmap(map, fn, desc)
 	vim.keymap.set({ "v" }, map, fn, { desc = desc })
 end
+
+nmap("<leader>tt", ":tabnew<CR>", "New tab")
+nmap("<leader>tc", ":tabclose<CR>", "Close tab")
+nmap("<leader>tn", ":tabnext<CR>", "Next tab")
+nmap("<leader>tp", ":tabprevious<CR>", "Previous tab")
+
+vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
+nmap("<leader>t", ":terminal<CR>", "Open Terminal")
+nmap("<leader>te", function()
+	local term_bufnr = vim.fn.bufnr("term://")
+	if term_bufnr == -1 then
+		vim.cmd("terminal")
+	else
+		local term_winnr = vim.fn.bufwinnr(term_bufnr)
+		if term_winnr == -1 then
+			vim.cmd("buffer " .. term_bufnr)
+		else
+			vim.cmd(term_winnr .. "wincmd w")
+		end
+	end
+	vim.cmd("startinsert")
+end, "Toggle Terminal")
 
 vim.keymap.set("n", "j", "v:count ? 'j' : 'gj'", { expr = true, silent = true })
 vim.keymap.set("n", "k", "v:count ? 'k' : 'gk'", { expr = true, silent = true })
@@ -31,12 +52,8 @@ nmap("<leader>Y", [["+Y]], "Copy to clipboard until end of line")
 nmap("<leader>e", vim.cmd.Ex, "Open Netrw")
 nmap("cit", [[f>lct<]], "Change inside tag")
 
-local function fmt_and_save()
-	vim.cmd.w()
-	require("conform").format({ async = true, lsp_fallback = true })
-end
 
-vim.keymap.set({ "n", "i", "v" }, "<A-s>", fmt_and_save, { desc = "Save file" })
+vim.keymap.set({ "n", "i", "v" }, "<A-s>", vim.cmd.w, { desc = "Save file" })
 
 -- Highlight on yank
 vim.api.nvim_create_autocmd("TextYankPost", {

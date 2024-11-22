@@ -29,6 +29,11 @@ vim.opt.smartcase = true
 
 vim.opt.signcolumn = "yes"
 
+vim.g.neovide_transparency = 0.7
+vim.g.neovide_floating_shadow = true
+vim.g.neovide_floating_z_height = 10
+vim.g.neovide_light_angle_degrees = 45
+vim.g.neovide_light_radius = 5
 
 vim.o.foldcolumn = "0"
 vim.o.foldlevel = 99
