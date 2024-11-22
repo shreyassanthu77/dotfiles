@@ -1,6 +1,21 @@
 local function on_attach(client, bufnr)
 	local trouble = require("trouble")
 
+	-- if client.name == "svelte" or client.name == "astro" or client.name == "ts_ls" then
+	-- 	print("Adding client: " .. client.name)
+	-- 	add_client(client)
+	-- end
+
+	if client.name == "svelte" then
+		vim.api.nvim_create_autocmd("BufWritePost", {
+			pattern = { "*.js", "*.ts" },
+			group = vim.api.nvim_create_augroup("svelte_ondidchangetsorjsfile", { clear = true }),
+			callback = function(ctx)
+				client.notify("$/onDidChangeTsOrJsFile", { uri = ctx.match })
+			end,
+		})
+	end
+
 	local nmap = function(keys, func, desc)
 		if desc then
 			desc = "LSP: " .. desc
