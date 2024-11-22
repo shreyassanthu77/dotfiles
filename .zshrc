@@ -1,8 +1,11 @@
+# Add deno completions to search path
+if [[ ":$FPATH:" != *":/home/shreyas/.zsh/completions:"* ]]; then export FPATH="/home/shreyas/.zsh/completions:$FPATH"; fi
 source ~/.config/zsh/utils.zsh
 source ~/.config/zsh/zinit.zsh
 source ~/.config/zsh/prompt.zsh
 source ~/.config/zsh/config.zsh
 source ~/.config/zsh/zellij.zsh
+source ~/.config/zsh/tmux.zsh
 
 alias r="source ~/.zshrc"
 
@@ -40,12 +43,13 @@ addlibpath $HOME/.pkgx/openssl.org/v1.1.1w/lib
 export GOPATH=$HOME/go
 export PNPM_HOME="/home/shreyas/.local/share/pnpm"
 
-export CHROME_EXECUTABLE=$(which microsoft-edge-dev)
+export CHROME_EXECUTABLE=$(which chromium)
 PATHS=(
 	"$GOPATH/bin"
 	"$PNPM_HOME"
 	"$HOME/.pulumi/bin"
 	"$HOME/.cargo/bin"
+	"$HOME/.bun/bin"
 	"$HOME/.sst/bin"
 	"$HOME/.turso"
 	"$HOME/flutter/bin"
@@ -75,4 +79,10 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-export ANTHROPIC_API_KEY=$(pass show anthropic/nvim)
+
+if [ -f /tmp/anthropic-api-key ]; then
+  export ANTHROPIC_API_KEY=$(cat /tmp/anthropic-api-key)
+else
+	pass show anthropic/nvim > /tmp/anthropic-api-key
+	export ANTHROPIC_API_KEY=$(cat /tmp/anthropic-api-key)
+fi
