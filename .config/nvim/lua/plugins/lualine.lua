@@ -23,6 +23,12 @@ return {
 						return " " .. recording
 					end,
 				},
+				lualine_b = {
+					"branch",
+					{
+						"tabs",
+					}
+				},
 				lualine_c = { {
 					"buffers",
 					filetype_names = {

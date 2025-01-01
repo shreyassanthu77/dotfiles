@@ -29,6 +29,8 @@ vim.opt.smartcase = true
 
 vim.opt.signcolumn = "yes"
 
+vim.opt.showtabline = 0
+
 vim.g.neovide_transparency = 0.7
 vim.g.neovide_floating_shadow = true
 vim.g.neovide_floating_z_height = 10

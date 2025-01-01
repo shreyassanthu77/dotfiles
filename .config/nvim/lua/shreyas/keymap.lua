@@ -52,6 +52,9 @@ nmap("<leader>Y", [["+Y]], "Copy to clipboard until end of line")
 nmap("<leader>e", vim.cmd.Ex, "Open Netrw")
 nmap("cit", [[f>lct<]], "Change inside tag")
 
+-- quickfix lists
+nmap("<C-l>", ":cnext<CR>", "Next quickfix")
+nmap("<C-h>", ":cprevious<CR>", "Previous quickfix")
 
 vim.keymap.set({ "n", "i", "v" }, "<A-s>", vim.cmd.w, { desc = "Save file" })
 
