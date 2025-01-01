@@ -86,3 +86,6 @@ else
 	pass show anthropic/nvim > /tmp/anthropic-api-key
 	export ANTHROPIC_API_KEY=$(cat /tmp/anthropic-api-key)
 fi
+
+# dune
+source $HOME/.dune/env/env.zsh
