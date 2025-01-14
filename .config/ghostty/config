@@ -1,0 +1,31 @@
+window-decoration = false
+confirm-close-surface = false
+
+font-family = "Geist Mono"
+font-size = 20
+
+keybind = clear
+keybind = ctrl+shift+,=reload_config
+
+cursor-color = #52AD70
+cursor-style = block
+
+background-opacity = 0.8
+background = #000000
+foreground = #A2A2A2
+palette = 0=#000000
+palette = 1=#ee5555
+palette = 2=#55ee55
+palette = 3=#eded55
+palette = 4=#5555ee
+palette = 5=#ee55ee
+palette = 6=#55eeee
+palette = 7=#ffffff
+palette = 8=#555555
+palette = 9=#ff5555
+palette = 10=#55ff55
+palette = 11=#ffff55
+palette = 13=#5555ff
+palette = 13=#ff55ff
+palette = 14=#55ffff
+palette = 15=#ffffff
