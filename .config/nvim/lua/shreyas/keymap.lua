@@ -9,13 +9,19 @@ local function xmap(map, fn, desc)
 	vim.keymap.set({ "v" }, map, fn, { desc = desc })
 end
 
+nmap("n", "nzz", "Jump to next match")
+nmap("N", "Nzz", "Jump to previous match")
+nmap("<C-d>", "<C-d>zz", "Scroll down half a page")
+nmap("<C-u>", "<C-u>zz", "Scroll up half a page")
+nmap("<C-4>", "$", "Jump to end of file")
+
 nmap("<leader>tt", ":tabnew<CR>", "New tab")
 nmap("<leader>tc", ":tabclose<CR>", "Close tab")
 nmap("<leader>tn", ":tabnext<CR>", "Next tab")
 nmap("<leader>tp", ":tabprevious<CR>", "Previous tab")
 
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
-nmap("<leader>t", ":terminal<CR>", "Open Terminal")
+nmap("<leader>tr", ":terminal<CR>", "Open Terminal")
 nmap("<leader>te", function()
 	local term_bufnr = vim.fn.bufnr("term://")
 	if term_bufnr == -1 then
@@ -42,8 +48,8 @@ xmap("K", ":m '<-2<CR>gv=gv", "Move Selection up")
 
 nmap("U", "<C-r>", "Redo")
 
-vim.keymap.set({ "n", "v" }, "<A-k>", "{", { desc = "Move to previous paragraph" })
-vim.keymap.set({ "n", "v" }, "<A-j>", "}", { desc = "Move to next paragraph" })
+vim.keymap.set({ "n", "v" }, "<A-k>", "{zz", { desc = "Move to previous paragraph" })
+vim.keymap.set({ "n", "v" }, "<A-j>", "}zz", { desc = "Move to next paragraph" })
 
 nmap("<leader>p", [["+p]], "Paste from clipboard")
 nmap("<leader>P", [["+P]], "Paste from clipboard before cursor")

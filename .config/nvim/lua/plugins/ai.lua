@@ -39,26 +39,26 @@ return {
 	-- end, "Next suggestion")
 	-- 	end
 	-- },
-	{
-		"zbirenbaum/copilot.lua",
-		config = function()
-			-- require("copilot").setup({
-			-- 	panel = { enabled = false },
-			-- 	suggestion = {
-			-- 		auto_trigger = true,
-			-- 		keymap = {
-			-- 			next = "<A-j>",
-			-- 			accept = "<A-a>",
-			-- 			dismiss = "<A-d>",
-			-- 		},
-			-- 	},
-			-- 	filetypes = {
-			-- 		markdown = true,
-			-- 		yaml = true,
-			-- 	},
-			-- })
-		end
-	},
+	-- {
+	-- 	"zbirenbaum/copilot.lua",
+	-- 	config = function()
+	-- 		require("copilot").setup({
+	-- 			panel = { enabled = false },
+	-- 			suggestion = {
+	-- 				auto_trigger = true,
+	-- 				keymap = {
+	-- 					next = "<A-j>",
+	-- 					accept = "<A-a>",
+	-- 					dismiss = "<A-d>",
+	-- 				},
+	-- 			},
+	-- 			filetypes = {
+	-- 				markdown = true,
+	-- 				yaml = true,
+	-- 			},
+	-- 		})
+	-- 	end
+	-- },
 	{
 		"yetone/avante.nvim",
 		event = "VeryLazy",
@@ -70,7 +70,7 @@ return {
 			"nvim-lua/plenary.nvim",
 			"MunifTanjim/nui.nvim",
 			"nvim-tree/nvim-web-devicons",
-			"zbirenbaum/copilot.lua",
+			-- "zbirenbaum/copilot.lua",
 			{
 				"HakonHarnes/img-clip.nvim",
 				event = "VeryLazy",
@@ -97,7 +97,7 @@ return {
 		config = function()
 			require("avante").setup {
 				provider = "claude",
-				auto_suggestions_provider = "copilot",
+				auto_suggestions_provider = "claude",
 				claude = {
 					-- api_key_name = "cmd:pass show anthropic/nvim",
 				},

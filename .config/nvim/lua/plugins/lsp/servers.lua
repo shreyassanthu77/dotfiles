@@ -6,11 +6,11 @@ return {
 		single_file_support = true,
 		filetypes = { "c", "cpp", "objc", "objcpp", "cuda" }
 	},
-	kotlin_language_server = {
-		init_options = {
-			storagePath = require('lspconfig.util').path.join(vim.env.XDG_DATA_HOME, "nvim-data")
-		},
-	},
+	-- kotlin_language_server = {
+	-- 	-- init_options = {
+	-- 	-- 	storagePath = require('lspconfig.util').path.join(vim.env.XDG_DATA_HOME, "nvim-data")
+	-- 	},
+	-- },
 	gopls = {},
 	pyright = {},
 	jsonls = {},

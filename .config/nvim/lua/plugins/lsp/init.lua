@@ -24,6 +24,12 @@ return {
 			"hrsh7th/cmp-nvim-lsp",
 			"hrsh7th/cmp-path",
 			"hrsh7th/cmp-buffer",
+			{
+				"jdrupal-dev/css-vars.nvim",
+				opts = {
+					cmp_filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "svelte" },
+				},
+			},
 
 			"rafamadriz/friendly-snippets",
 		},
@@ -131,6 +137,7 @@ return {
 					{ name = "luasnip" },
 					{ name = "path" },
 					{ name = "buffer" },
+					{ name = "css_vars" },
 				},
 				completion = {
 					autocomplete = {
