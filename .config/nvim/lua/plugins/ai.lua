@@ -70,7 +70,6 @@ return {
 			"nvim-lua/plenary.nvim",
 			"MunifTanjim/nui.nvim",
 			"nvim-tree/nvim-web-devicons",
-			-- "zbirenbaum/copilot.lua",
 			{
 				"HakonHarnes/img-clip.nvim",
 				event = "VeryLazy",
@@ -98,9 +97,7 @@ return {
 			require("avante").setup {
 				provider = "claude",
 				auto_suggestions_provider = "claude",
-				claude = {
-					-- api_key_name = "cmd:pass show anthropic/nvim",
-				},
+				claude = {},
 			}
 		end,
 	},

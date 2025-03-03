@@ -1,13 +1,14 @@
 return {
 	"stevearc/conform.nvim",
 	opts = {
+
 		formatters_by_ft = {
 			javascript = { "prettierd" },
 			javascriptreact = { "prettierd" },
 			typescript = { "prettierd" },
 			typescriptreact = { "prettierd" },
-			json = { { "deno_fmt", "prettierd" } },
-			jsonc = { { "deno_fmt", "prettierd" } },
+			json = { "deno_fmt", "prettierd" },
+			jsonc = { "deno_fmt", "prettierd" },
 			html = { "prettierd" },
 			css = { "prettierd" },
 			astro = { "prettierd" },
@@ -20,6 +21,7 @@ return {
 		},
 		format_on_save = {
 			lsp_format = "fallback",
+			stop_after_first = true,
 			timeout = 500,
 		}
 	},

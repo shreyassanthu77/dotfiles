@@ -7,6 +7,8 @@ source ~/.config/zsh/config.zsh
 source ~/.config/zsh/zellij.zsh
 source ~/.config/zsh/tmux.zsh
 
+eval "$(direnv hook zsh)"
+
 alias r="source ~/.zshrc"
 
 alias ls="ls --color"
@@ -75,9 +77,9 @@ addpath $ZVM_INSTALL
 source <(pkgx --shellcode)
 source <(caddy completion zsh)
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# export NVM_DIR="$HOME/.nvm"
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 
 if [ -f /tmp/anthropic-api-key ]; then
@@ -88,4 +90,4 @@ else
 fi
 
 # dune
-source $HOME/.dune/env/env.zsh
+# source $HOME/.dune/env/env.zsh
