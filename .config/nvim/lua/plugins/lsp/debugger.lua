@@ -37,6 +37,17 @@ return {
 				dapui.close()
 			end
 
+			-- vim.keymap.set("n", "<leader>da", function()
+			-- 	dap.attach({
+			-- 		port = vim.fn.input("Port: ", vim.fn.input("Port: ")),
+			-- 		type = "server",
+			-- 		executable = vim.fn.input("Executable: ", vim.fn.input("Executable: ")),
+			--
+			-- 	}, {
+			-- 		request = "attach",
+			-- 	}, {})
+			-- end, { desc = "DAP attach" })
+
 			vim.keymap.set("n", "<leader>db", function()
 				dap.toggle_breakpoint()
 			end, { desc = "DAP set breakpoint" })

@@ -14,9 +14,21 @@ local function files()
 	if __in_git_repo then
 		return require("telescope.builtin").git_files()
 	else
-		return require("telescope.builtin").find_files()
+		return require("telescope.builtin").find_fdles()
 	end
 end
+
+-- local function tabs()
+-- 	local pickers = require("telescope.pickers")
+-- 	local finders = require("telescope.finders")
+-- 	return
+-- 		pickers
+-- 			.new({
+-- 				prompt_title = "Find Tabs",
+-- 				finder = finders.
+-- 		})
+-- 			:find()
+-- end
 
 return {
 	"nvim-telescope/telescope.nvim",
@@ -52,5 +64,6 @@ return {
 		vim.keymap.set("n", "<leader>fg", files, { desc = "Find Files" })
 		vim.keymap.set("n", "<leader>/", builtin.current_buffer_fuzzy_find, { desc = "Find in Current Buffer" })
 		vim.keymap.set("n", "<leader>fl", builtin.live_grep, { desc = "Find in Files" })
+		-- vim.keymap.set("n", "<leader>ft", tabs, { desc = "Find all Tabs" })
 	end,
 }

@@ -12,9 +12,22 @@ return {
 				auto_enable = true,
 				lsp = true,
 			},
+			inputs = {
+				ccc.input.hsl,
+				ccc.input.hsv,
+				ccc.input.rgb,
+				ccc.input.oklch,
+			},
 			outputs = {
-				ccc.output.hex
+				ccc.output.css_rgba,
+				ccc.output.hex,
+				ccc.output.css_hsl,
+				ccc.output.float,
 			}
 		})
+
+		vim.keymap.set("n", "<leader>hc", function()
+			vim.cmd.CccPick()
+		end)
 	end
 }
