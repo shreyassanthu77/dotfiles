@@ -23,6 +23,13 @@ local function on_attach(client, bufnr)
 
 		vim.keymap.set("n", keys, func, { buffer = bufnr, desc = desc })
 	end
+	local nimap = function(keys, func, desc)
+		if desc then
+			desc = "LSP: " .. desc
+		end
+
+		vim.keymap.set({ "n", "i" }, keys, func, { buffer = bufnr, desc = desc })
+	end
 
 	nmap("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
 	nmap("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
@@ -47,7 +54,7 @@ local function on_attach(client, bufnr)
 	nmap("<leader>dl", vim.diagnostic.open_float, "[D]iagnostic [L]ist")
 
 	nmap("K", vim.lsp.buf.hover, "Hover Documentation")
-	nmap("<C-k>", vim.lsp.buf.signature_help, "Signature Documentation")
+	nimap("<C-k>", vim.lsp.buf.signature_help, "Signature Documentation")
 
 	nmap("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
 	nmap("<leader>wa", vim.lsp.buf.add_workspace_folder, "[W]orkspace [A]dd Folder")
@@ -105,6 +112,5 @@ vim.api.nvim_create_autocmd({ "BufReadCmd" }, {
 	pattern = { "deno:/*" },
 	callback = virtual_text_document,
 })
--- end of deno stuff
 
 return on_attach

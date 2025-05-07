@@ -2,11 +2,24 @@ local vscode = require("vscode")
 
 local function nmap(keys, func, desc)
 	if desc then
-		desc = "LSP: " .. desc
+		desc = desc
 	end
 
-	vim.keymap.set("n", keys, func, { buffer = bufnr, desc = desc })
+	vim.keymap.set("n", keys, func, { desc = desc })
 end
+
+local function map(mode, keys, func, desc)
+	if desc then
+		desc = desc
+	end
+
+	vim.keymap.set(mode, keys, func, { desc = desc })
+end
+
+
+map({ "n", "i" }, "<A-b>", function()
+	vim.cmd.write()
+end, "Save")
 
 nmap("<leader>dp", function()
 	vscode.call("editor.action.marker.prev")

@@ -96,7 +96,7 @@ return {
 		root_dir = function(startpath)
 			local util = require("lspconfig.util")
 			local p = util.root_pattern("package.json")(startpath)
-			if p ~= nil and not util.path.exists(p .. "/deno.json") then
+			if p ~= nil and not util.path.exists(p .. "/deno.json") and not util.path.exists(p .. "/deno.jsonc") then
 				return p
 			end
 		end,
