@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+# Usage: makeflame <your_program.exe> [args...]
+
+EXE="$1"
+shift
+
+perf record -F 9099 -g -- ./"$EXE" "$@"
+
+perf script > out.perf
+
+stackcollapse-perf.pl out.perf > out.folded
+
+flamegraph.pl out.folded > flamegraph.svg
+
+echo "Flamegraph generated: flamegraph.svg"
