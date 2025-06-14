@@ -76,6 +76,7 @@ addpath $ZVM_INSTALL
 
 source <(pkgx --shellcode)
 source <(caddy completion zsh)
+source <(jj util completion zsh)
 
 # export NVM_DIR="$HOME/.nvm"
 # [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
