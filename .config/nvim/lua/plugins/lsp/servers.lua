@@ -92,6 +92,7 @@ return {
 	rust_analyzer = {},
 	templ = {},
 	dockerls = {},
+	docker_compose_language_service = {},
 	ts_ls = {
 		root_dir = function(startpath)
 			local util = require("lspconfig.util")
