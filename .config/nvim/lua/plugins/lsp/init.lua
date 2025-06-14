@@ -39,8 +39,10 @@ return {
 			},
 
 			"rafamadriz/friendly-snippets",
+			"folke/neoconf.nvim",
 		},
 		config = function()
+			require("neoconf").setup({})
 			require("neodev").setup()
 
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
