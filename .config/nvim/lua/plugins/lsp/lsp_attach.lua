@@ -35,8 +35,8 @@ local function on_attach(client, bufnr)
 	nmap("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
 
 
-	nmap("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
-	-- nmap("g", vim.lsp.buf.definition, "[G]oto [D]efinition")
+	-- nmap("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
+	nmap("gd", vim.lsp.buf.definition, "[G]oto [D]efinition")
 	nmap("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
 	nmap("gI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
 	nmap("<leader>D", vim.lsp.buf.type_definition, "Type [D]efinition")
