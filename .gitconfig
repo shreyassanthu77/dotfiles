@@ -9,3 +9,15 @@
 	email = me@shreyascodes.tech
 [init]
 	defaultBranch = main
+[diff]
+	tool = nvim
+[difftool "nvim"]
+	cmd = nvim -d \"$LOCAL\" \"$REMOTE\"
+[core]
+	pager = delta
+[interactive]
+	diffFilter = delta --color-only
+[delta]
+	navigate = true
+[merge]
+	conflictStyle = zdiff3
