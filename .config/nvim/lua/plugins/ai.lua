@@ -94,11 +94,11 @@ return {
 		},
 
 		config = function()
-			require("avante").setup {
-				provider = "claude",
-				auto_suggestions_provider = "claude",
-				claude = {},
-			}
+			-- require("avante").setup {
+			-- 	provider = "claude",
+			-- 	auto_suggestions_provider = "claude",
+			-- 	claude = {},
+			-- }
 		end,
 	},
 }
