@@ -96,10 +96,7 @@ return {
 				setup_server(server_name)
 			end
 
-
-
 			blink.setup({
-
 				completion = {
 					documentation = {
 						auto_show = true,

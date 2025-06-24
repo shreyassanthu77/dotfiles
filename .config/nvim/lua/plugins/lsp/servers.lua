@@ -1,5 +1,13 @@
 local zls_path = vim.fs.normalize("~/.zvm/bin/zls")
 
+-- taken from https://github.com/LazyVim/LazyVim/blob/25abbf546d564dc484cf903804661ba12de45507/lua/lazyvim/util/init.lua#L250
+local function get_pkg_path(pkg, path, opts)
+	local root = vim.env.MASON or (vim.fn.stdpath("data") .. "/mason")
+	path = path or ""
+	return root .. "/packages/" .. pkg .. "/" .. path
+end
+
+
 return {
 	clangd = {
 		-- root_dir = require("lspconfig.util").root_pattern(".clangd"),
@@ -93,7 +101,7 @@ return {
 	templ = {},
 	dockerls = {},
 	docker_compose_language_service = {},
-	ts_ls = {
+	vtsls = {
 		root_dir = function(startpath)
 			local util = require("lspconfig.util")
 			local p = util.root_pattern("package.json")(startpath)
@@ -103,19 +111,34 @@ return {
 		end,
 		single_file_support = false,
 		settings = {
-			typescript = {
-				inlayHints = {
-					includeInlayParameterNameHints = 'all',
-					includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-					includeInlayFunctionParameterTypeHints = true,
-					includeInlayVariableTypeHints = true,
-					includeInlayVariableTypeHintsWhenTypeMatchesName = false,
-					includeInlayPropertyDeclarationTypeHints = true,
-					includeInlayFunctionLikeReturnTypeHints = true,
-					includeInlayEnumMemberValueHints = true,
+			complete_function_calls = true,
+			vtsls = {
+				autoUserWorkspaceTsdk = true,
+				tsserver = {
+					globalPlugins = {
+						{
+							name = "typescript-svelte-plugin",
+							location = get_pkg_path("svelte-language-server", "/node_modules/typescript-svelte-plugin"),
+							enableForWorkspaceTypeScriptVersions = true,
+						},
+					}
 				}
 			},
-		},
+			typescript = {
+				updateImportsOnFileMove = { enabled = "always" },
+				suggest = {
+					completeFunctionCalls = true,
+				},
+				inlayHints = {
+					enumMemberValues = { enabled = true },
+					functionLikeReturnTypes = { enabled = true },
+					parameterNames = { enabled = "literals" },
+					parameterTypes = { enabled = true },
+					propertyDeclarationTypes = { enabled = true },
+					variableTypes = { enabled = false },
+				},
+			},
+		}
 	},
 	denols = {
 		root_dir = require("lspconfig.util").root_pattern("deno.json", "deno.jsonc"),
