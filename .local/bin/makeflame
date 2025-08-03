@@ -5,7 +5,7 @@
 EXE="$1"
 shift
 
-perf record -F 9099 -g -- ./"$EXE" "$@"
+perf record -F 10000 -g -- ./"$EXE" "$@"
 
 perf script > out.perf
 
