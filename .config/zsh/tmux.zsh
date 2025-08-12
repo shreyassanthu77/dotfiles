@@ -5,7 +5,7 @@ function ts() {
         tmux switch-client -t "$1" 2>/dev/null || tmux new-session -d -s "$1" \; switch-client -t "$1"
     else
         # Attach to session or create if not exists
-        tmux attach -t "$1" || tmux new -s "$1"
+        tmux attach -t "=$1" || tmux new -s "$1"
     fi
 }
 
@@ -23,10 +23,11 @@ function ta() {
         return
     fi
     
-    new_session="New Session"
+    new_session="Create new session"
     selected_session=$(echo "$new_session"$'\n'"$tmux_sessions" | fzf)
+
     
-    if [ "$selected_session" = "$new_session" ]; then
+    if [[ "$selected_session" = "$new_session" ]]; then
         ts "$base"
     else
         ts "$selected_session"
