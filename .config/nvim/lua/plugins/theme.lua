@@ -14,6 +14,13 @@ return {
 			local onedark = require("onedark")
 			onedark.setup(conf.opts)
 			onedark.load()
+			require("transparent").setup({
+				extra_groups = {
+					"AvanteSidebarNormal",
+					"AvanteSidebarWinSeparator",
+					"AvanteSidebarWinHorizontalSeparator"
+				}
+			})
 			vim.cmd.TransparentEnable()
 		end,
 	},

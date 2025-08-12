@@ -17,6 +17,40 @@ return {
 			})
 		end,
 	},
+	{
+		"yetone/avante.nvim",
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			"MunifTanjim/nui.nvim",
+		},
+		build = "make",
+		event = "VeryLazy",
+		version = false, -- Never set this value to "*"! Never!
+		---@module 'avante'
+		---@type avante.Config
+		opts = {
+			provider = "gpt_oss_groq",
+			providers = {
+				kimi_groq = {
+					__inherited_from = "openai",
+					api_key_name = "cmd:jq '.groq.key' -r ~/.local/share/opencode/auth.json",
+					endpoint = "https://api.groq.com/openai/v1/",
+					model = "moonshotai/kimi-k2-instruct",
+				},
+				gpt_oss_groq = {
+					__inherited_from = "openai",
+					api_key_name = "cmd:jq '.groq.key' -r ~/.local/share/opencode/auth.json",
+					endpoint = "https://api.groq.com/openai/v1/",
+					model = "openai/gpt-oss-120b",
+				}
+			},
+			windows = {
+				sidebar_header = {
+					enabled = false,
+				}
+			},
+		},
+	}
 	-- {
 	-- 	'Exafunction/codeium.vim',
 	-- 	event = 'BufEnter',
