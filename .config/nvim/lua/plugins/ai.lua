@@ -29,7 +29,7 @@ return {
 		---@module 'avante'
 		---@type avante.Config
 		opts = {
-			provider = "gpt_oss_groq",
+			provider = "kimi_groq",
 			providers = {
 				kimi_groq = {
 					__inherited_from = "openai",
@@ -42,6 +42,13 @@ return {
 					api_key_name = "cmd:jq '.groq.key' -r ~/.local/share/opencode/auth.json",
 					endpoint = "https://api.groq.com/openai/v1/",
 					model = "openai/gpt-oss-120b",
+				},
+
+				openrouter_claude_4_sonnet = {
+					__inherited_from = "openai",
+					endpoint = "https://openrouter.ai/api/v1",
+					api_key_name = "cmd:jq '.openrouter.key' -r ~/.local/share/opencode/auth.json",
+					model = "anthropic/claude-sonnet-4",
 				}
 			},
 			windows = {
