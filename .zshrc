@@ -78,34 +78,6 @@ source <(pkgx --shellcode)
 source <(caddy completion zsh)
 source <(jj util completion zsh)
 
-# export NVM_DIR="$HOME/.nvm"
-# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-
-if [ -f /tmp/anthropic-api-key ]; then
-  export ANTHROPIC_API_KEY=$(cat /tmp/anthropic-api-key)
-else
-	pass show anthropic/nvim > /tmp/anthropic-api-key
-	export ANTHROPIC_API_KEY=$(cat /tmp/anthropic-api-key)
-fi
-
-if [ -f /tmp/openai-api-key ]; then
-  export OPENAI_API_KEY=$(cat /tmp/openai-api-key)
-else
-	pass show openai/codex > /tmp/openai-api-key
-	export OPENAI_API_KEY=$(cat /tmp/openai-api-key)
-fi
-
-if [ -f /tmp/gemini-api-key ]; then
-  export GEMINI_API_KEY=$(cat /tmp/gemini-api-key)
-else
-	pass show googleai/opencode > /tmp/gemini-api-key
-	export GEMINI_API_KEY=$(cat /tmp/gemini-api-key)
-fi
-# dune
-# source $HOME/.dune/env/env.zsh
-
 function lockfix() {
 	hyprctl --instance 0 'keyword misc:allow_session_lock_restore 1'
 	hyprctl --instance 0 'dispatch exec hyprlock'
