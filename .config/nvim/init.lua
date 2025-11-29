@@ -563,6 +563,11 @@ u.pack({
 			},
 		},
 	},
+	{
+		source = "esmuellert/vscode-diff.nvim",
+		depends = { "MunifTanjim/nui.nvim" },
+		opts = {},
+	},
 })
 
 vim.filetype.add({
