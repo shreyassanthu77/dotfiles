@@ -482,14 +482,12 @@ u.pack({
 					or type(name_or_ensure) == "string" and name_or_ensure
 					or nil
 
-				if not server_name then
-					return
+				if server_name ~= nil then
+					vim.lsp.config(server_name, {
+						capabilities = capabilities,
+					})
+					vim.lsp.enable(server_name)
 				end
-
-				vim.lsp.config[server_name] = {
-					capabilities = capabilities,
-				}
-				vim.lsp.enable(server_name)
 			end
 		end,
 	},
