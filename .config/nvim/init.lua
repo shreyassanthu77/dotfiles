@@ -83,6 +83,8 @@ u.map({
 	["<leader>ww"] = ":set wrap!<CR>",
 })
 
+vim.ui.input = u.vimput
+
 u.pack({
 	{
 		source = "jiaoshijie/undotree",
@@ -582,45 +584,3 @@ vim.filetype.add({
 		ml = "ocaml",
 	},
 })
-
----@diagnostic disable-next-line: duplicate-set-field
-vim.ui.input = function(opts, on_confirm)
-	local prompt = opts.prompt or "Input: "
-	local default = opts.default or ""
-
-	local width = math.max(vim.fn.strdisplaywidth(prompt) * 2, vim.fn.strdisplaywidth(default) * 2)
-	local buf = vim.api.nvim_create_buf(false, true)
-	local float = vim.api.nvim_open_win(buf, true, {
-		title = prompt,
-		focusable = true,
-		width = width,
-		relative = "cursor",
-		height = 1,
-		row = 0,
-		col = 0,
-		style = "minimal",
-		border = "rounded",
-	})
-	vim.api.nvim_buf_set_text(buf, 0, 0, 0, 0, { default })
-	vim.cmd.startinsert()
-	vim.api.nvim_win_set_cursor(float, { 1, vim.fn.strdisplaywidth(default) })
-
-	local function on_close()
-		vim.cmd.stopinsert()
-		vim.api.nvim_win_close(float, true)
-		on_confirm(nil)
-	end
-
-	local function on_submit()
-		vim.cmd.stopinsert()
-		local input = vim.api.nvim_buf_get_lines(buf, 0, 1, false)[1]
-		vim.api.nvim_win_close(float, true)
-		on_confirm(input)
-	end
-
-	u.map({
-		["<Esc>"] = on_close,
-		["q"] = on_close,
-		{ { "n", "i", "v" }, "<CR>", on_submit },
-	}, { buffer = buf })
-end
