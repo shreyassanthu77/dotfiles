@@ -512,6 +512,7 @@ u.pack({
 	},
 	{
 		source = "esmuellert/vscode-diff.nvim",
+		lazy = true,
 		depends = { "MunifTanjim/nui.nvim" },
 		opts = {},
 	},
