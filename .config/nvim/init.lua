@@ -299,6 +299,7 @@ u.pack({
 	{ source = "j-hui/fidget.nvim", opts = {} },
 	{
 		source = "neovim/nvim-lspconfig",
+		lazy = true,
 		depends = {
 			"williamboman/mason.nvim",
 			"williamboman/mason-lspconfig.nvim",
@@ -420,6 +421,17 @@ u.pack({
 				end
 			end
 		end,
+	},
+	{
+		source = "mrjones2014/codesettings.nvim",
+		lazy = true,
+		opts = {
+			config_file_paths = { ".vscode/settings.json", "codesettings.json", "lspsettings.json" },
+			jsonls_integration = true,
+			lua_ls_integration = true,
+			jsonc_filetype = true,
+			live_reload = true,
+		},
 	},
 	{
 		source = "saghen/blink.cmp",

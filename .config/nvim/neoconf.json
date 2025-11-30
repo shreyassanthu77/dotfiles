@@ -1,9 +1,0 @@
-{
-  "lspconfig": {
-    "tailwindcss": {
-      "tailwindCSS.experimental.classRegex": [
-        ["[:=]\\s*([\"'`][^\"'`]*.*?[\"'`])", "[\"'`]([^\"'`]*).*?[\"'`]"]
-      ]
-    }
-  }
-}
