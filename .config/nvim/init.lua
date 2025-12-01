@@ -528,6 +528,18 @@ u.pack({
 		depends = { "MunifTanjim/nui.nvim" },
 		opts = {},
 	},
+	{
+		source = "chrisgrieser/nvim-tinygit",
+		lazy = true,
+		config = function()
+			local tinygit = require("tinygit")
+			tinygit.setup({})
+			u.map({
+				["<leader>ga"] = tinygit.interactiveStaging,
+				{ { "n", "v" }, "<leader>gh", tinygit.fileHistory },
+			})
+		end,
+	},
 	-- function()
 	-- 	local download_done = true
 	--
