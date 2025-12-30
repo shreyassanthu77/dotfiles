@@ -55,12 +55,15 @@ PATHS=(
 	"$HOME/.sst/bin"
 	"$HOME/.turso"
 	"$HOME/flutter/bin"
+	"$HOME/.pub-cache/bin"
 	"$HOME/Android/Sdk/platform-tools"
 )
 
 for p in $PATHS; do
 	addpath $p
 done
+
+export ANDROID_HOME=$HOME/Android/Sdk
 
 # zig version manager
 if [ ! -d "$HOME/.zvm" ]; then
