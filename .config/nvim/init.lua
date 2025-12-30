@@ -305,6 +305,7 @@ u.pack({
 			"williamboman/mason-lspconfig.nvim",
 			"WhoIsSethDaniel/mason-tool-installer.nvim",
 			"saghen/blink.cmp",
+			"nvim-flutter/flutter-tools.nvim",
 		},
 		opts = {
 			--- @type table<string | integer, false | string>
@@ -328,6 +329,7 @@ u.pack({
 				"prismals",
 				"lua_ls",
 				"sqlls",
+				"oxlint",
 				zls = false,
 			},
 			--- @type string[]
@@ -348,6 +350,7 @@ u.pack({
 						["<leader>ca"] = vim.lsp.buf.code_action,
 						["<leader>rn"] = vim.lsp.buf.rename,
 						["gd"] = telescope.lsp_definitions,
+						["gr"] = telescope.lsp_references,
 						["<leader>dp"] = function()
 							vim.diagnostic.jump({ count = -1 })
 						end,
@@ -359,6 +362,16 @@ u.pack({
 						end,
 						["<leader>dd"] = telescope.diagnostics,
 					}, { buffer = event.buf })
+
+					-- check if the current lsp is flutter
+					if event.file:match("%.dart$") then
+						u.map({
+							["<leader>fll"] = vim.cmd.FlutterRun,
+							["<leader>flr"] = vim.cmd.FlutterRestart,
+							["<leader>flt"] = vim.cmd.FlutterLogToggle,
+							["<leader>flq"] = vim.cmd.FlutterQuit,
+						}, { buffer = event.buf })
+					end
 				end,
 			})
 
@@ -413,6 +426,7 @@ u.pack({
 					or type(name_or_ensure) == "string" and name_or_ensure
 					or nil
 
+				print(server_name)
 				if server_name ~= nil then
 					vim.lsp.config(server_name, {
 						capabilities = capabilities,
@@ -420,6 +434,19 @@ u.pack({
 					vim.lsp.enable(server_name)
 				end
 			end
+
+			require("flutter-tools").setup({
+				lsp = {
+					capabilities = capabilities,
+					color = {
+						background = false,
+						background_color = nil,
+						foreground = false,
+						virtual_text = true,
+						virtual_text_str = "■",
+					},
+				},
+			})
 		end,
 	},
 	{
@@ -430,7 +457,7 @@ u.pack({
 			jsonls_integration = true,
 			lua_ls_integration = true,
 			jsonc_filetype = true,
-			live_reload = true,
+			live_reload = false,
 		},
 	},
 	{
@@ -473,8 +500,8 @@ u.pack({
 				javascriptreact = { "prettierd" },
 				typescript = { "prettierd" },
 				typescriptreact = { "prettierd" },
-				json = { "deno_fmt", "prettierd" },
-				jsonc = { "deno_fmt", "prettierd" },
+				json = { "prettierd" },
+				jsonc = { "prettierd" },
 				html = { "prettierd" },
 				css = { "prettierd" },
 				astro = { "prettierd" },
@@ -514,7 +541,7 @@ u.pack({
 			},
 			code = { sign = false },
 			anti_conceal = { enabled = false },
-			file_types = { "markdown", "opencode_output" },
+			file_types = { "opencode_output" },
 		},
 	},
 	{
