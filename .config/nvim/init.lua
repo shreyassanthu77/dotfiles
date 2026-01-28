@@ -1,5 +1,6 @@
 local u = require("utils")
 
+vim.o.exrc = true
 vim.o.termguicolors = true -- enable true colors
 
 vim.g.mapleader = " " -- leader key
@@ -299,7 +300,7 @@ u.pack({
 	{ source = "j-hui/fidget.nvim", opts = {} },
 	{
 		source = "neovim/nvim-lspconfig",
-		lazy = true,
+		lazy = false,
 		depends = {
 			"williamboman/mason.nvim",
 			"williamboman/mason-lspconfig.nvim",
@@ -426,7 +427,6 @@ u.pack({
 					or type(name_or_ensure) == "string" and name_or_ensure
 					or nil
 
-				print(server_name)
 				if server_name ~= nil then
 					vim.lsp.config(server_name, {
 						capabilities = capabilities,
@@ -566,6 +566,11 @@ u.pack({
 				{ { "n", "v" }, "<leader>gh", tinygit.fileHistory },
 			})
 		end,
+	},
+	{
+		source = "sourcegraph/amp.nvim",
+		lazy = true,
+		opts = { auto_start = true, log_level = "info" },
 	},
 	-- function()
 	-- 	local download_done = true
