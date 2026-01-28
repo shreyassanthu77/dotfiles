@@ -8,7 +8,7 @@
   // Protect from pruning for <turns> message turns
   "turnProtection": {
     "enabled": false,
-    "turns": 4
+    "turns": 4,
   },
   // LLM-driven context pruning tools
   "tools": {
@@ -18,18 +18,18 @@
       "nudgeEnabled": true,
       "nudgeFrequency": 10,
       // Additional tools to protect from pruning
-      "protectedTools": []
+      "protectedTools": [],
     },
     // Removes tool content from context without preservation (for completed tasks or noise)
     "discard": {
-      "enabled": true
+      "enabled": true,
     },
     // Distills key findings into preserved knowledge before removing raw content
     "extract": {
       "enabled": true,
       // Show distillation content as an ignored message notification
-      "showDistillation": false
-    }
+      "showDistillation": false,
+    },
   },
   // Automatic pruning strategies
   "strategies": {
@@ -37,23 +37,19 @@
     "deduplication": {
       "enabled": true,
       // Additional tools to protect from pruning
-      "protectedTools": []
+      "protectedTools": [],
     },
     // Prune write tool inputs when the file has been subsequently read
     "supersedeWrites": {
-      "enabled": true
-    },
-    // (Legacy) Run an LLM to analyze what tool calls are no longer relevant on idle
-    "onIdle": {
       "enabled": false,
+    },
+    // Prune tool inputs for errored tools after X turns
+    "purgeErrors": {
+      "enabled": true,
+      // Number of turns before errored tool inputs are pruned
+      "turns": 4,
       // Additional tools to protect from pruning
       "protectedTools": [],
-      // Override model for analysis (format: "provider/model")
-      // "model": "anthropic/claude-haiku-4-5",
-      // Show toast notifications when model selection fails
-      "showModelErrorToasts": true,
-      // When true, fallback models are not permitted
-      "strictModelSelection": false
-    }
-  }
+    },
+  },
 }
