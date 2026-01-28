@@ -57,6 +57,7 @@ PATHS=(
 	"$HOME/flutter/bin"
 	"$HOME/.pub-cache/bin"
 	"$HOME/Android/Sdk/platform-tools"
+	"$HOME/.amp/bin"
 )
 
 for p in $PATHS; do
@@ -85,3 +86,4 @@ function lockfix() {
 	hyprctl --instance 0 'keyword misc:allow_session_lock_restore 1'
 	hyprctl --instance 0 'dispatch exec hyprlock'
 }
+
