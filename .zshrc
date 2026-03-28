@@ -7,8 +7,6 @@ source ~/.config/zsh/config.zsh
 source ~/.config/zsh/zellij.zsh
 source ~/.config/zsh/tmux.zsh
 
-eval "$(direnv hook zsh)"
-
 alias r="source ~/.zshrc"
 
 alias ls="ls --color"
