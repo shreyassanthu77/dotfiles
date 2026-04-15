@@ -255,14 +255,88 @@ u.pack({
 			local builtin = require("telescope.builtin")
 
 			u.map({
-				["<leader><space>"] = builtin.find_files,
+				-- ["<leader><space>"] = builtin.find_files,
 				["<leader>fg"] = builtin.git_files,
 				["<leader>ff"] = builtin.buffers,
 				["<leader>/"] = builtin.current_buffer_fuzzy_find,
-				["<leader>fl"] = builtin.live_grep,
+				-- ["<leader>fl"] = builtin.live_grep,
 			})
 		end,
 	},
+	function()
+		local download_done = true
+
+		local function pre_install()
+			download_done = false
+			-- This is a hack to make fff.nvim work with mini.deps
+			vim.g.fff = { lazy_sync = true }
+		end
+
+		local function on_download_done(ok, err)
+			if not ok then
+				vim.notify("fff.nvim build failed: " .. err, vim.log.levels.ERROR)
+			end
+			vim.g.fff = nil
+			download_done = true
+		end
+
+		local function post_install()
+			-- We defer to ensure the plugin module is available in the path
+			vim.defer_fn(function()
+				require("fff.download").download_or_build_binary(on_download_done)
+			end, 100)
+		end
+
+		local function wait_for_download()
+			if not download_done then
+				vim.wait(100, function()
+					return download_done
+				end, 200)
+			end
+		end
+
+		--- @type PluginSpec
+		return {
+			source = "dmtrKovalenko/fff.nvim",
+			hooks = {
+				pre_install = pre_install,
+				post_install = post_install,
+				pre_checkout = pre_install,
+				post_checkout = post_install,
+			},
+			config = function()
+				wait_for_download()
+				local fff = require("fff")
+				fff.setup({
+					prompt = "> ",
+					hl = {
+						border = "Comment",
+					},
+					debug = {
+						enabled = false,
+						show_scores = false,
+					},
+					logging = {
+						enabled = false,
+					},
+				})
+
+				u.autocmd("FileType", {
+					pattern = "fff_input",
+					callback = function(event)
+						u.nvmap("<Esc>", function()
+							require("fff.picker_ui").close()
+						end, { buffer = event.buf, silent = true })
+					end,
+				})
+
+				u.map({
+					["<leader><space>"] = require("fff").find_files,
+					["<leader>fl"] = require("fff").live_grep,
+				})
+			end,
+		}
+	end,
 	{
 		source = "nvim-treesitter/nvim-treesitter",
 		main = "nvim-treesitter.configs",
@@ -572,77 +646,6 @@ u.pack({
 		lazy = true,
 		opts = { auto_start = true, log_level = "info" },
 	},
-	-- function()
-	-- 	local download_done = true
-	--
-	-- 	local function pre_install()
-	-- 		download_done = false
-	-- 		-- This is a hack to make fff.nvim work with mini.deps
-	-- 		vim.g.fff = { lazy_sync = true }
-	-- 	end
-	--
-	-- 	local function on_download_done(ok, err)
-	-- 		if not ok then
-	-- 			vim.notify("fff.nvim build failed: " .. err, vim.log.levels.ERROR)
-	-- 		end
-	-- 		vim.g.fff = nil
-	-- 		download_done = true
-	-- 	end
-	--
-	-- 	local function post_install()
-	-- 		-- We defer to ensure the plugin module is available in the path
-	-- 		vim.defer_fn(function()
-	-- 			require("fff.download").download_or_build_binary(on_download_done)
-	-- 		end, 100)
-	-- 	end
-	--
-	-- 	local function wait_for_download()
-	-- 		if not download_done then
-	-- 			vim.wait(100, function()
-	-- 				return download_done
-	-- 			end, 200)
-	-- 		end
-	-- 	end
-	--
-	-- 	--- @type PluginSpec
-	-- 	return {
-	-- 		source = "dmtrKovalenko/fff.nvim",
-	-- 		hooks = {
-	-- 			pre_install = pre_install,
-	-- 			post_install = post_install,
-	-- 			pre_checkout = pre_install,
-	-- 			post_checkout = post_install,
-	-- 		},
-	-- 		config = function()
-	-- 			wait_for_download()
-	-- 			local fff = require("fff")
-	-- 			fff.setup({
-	-- 				prompt = "> ",
-	-- 				hl = {
-	-- 					border = "Comment",
-	-- 				},
-	-- 				debug = {
-	-- 					enabled = false,
-	-- 					show_scores = false,
-	-- 				},
-	-- 				logging = {
-	-- 					enabled = false,
-	-- 				},
-	-- 			})
-	--
-	-- 			u.autocmd("FileType", {
-	-- 				pattern = "fff_input",
-	-- 				callback = function(event)
-	-- 					u.nvmap("<Esc>", function()
-	-- 						require("fff.picker_ui").close()
-	-- 					end, { buffer = event.buf, silent = true })
-	-- 				end,
-	-- 			})
-	--
-	-- 			u.nmap("<leader><space>", require("fff").find_files)
-	-- 		end,
-	-- 	}
-	-- end,
 })
 
 vim.filetype.add({
