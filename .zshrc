@@ -85,3 +85,10 @@ function lockfix() {
 	hyprctl --instance 0 'dispatch exec hyprlock'
 }
 
+
+## [Completion]
+## Completion scripts setup. Remove the following line to uninstall
+[[ -f /home/shreyas/.dart-cli-completion/zsh-config.zsh ]] && . /home/shreyas/.dart-cli-completion/zsh-config.zsh || true
+## [/Completion]
+
+export PATH="/home/shreyas/.shorebird/bin:$PATH"
