@@ -91,6 +91,7 @@ u.pack({
 		source = "jiaoshijie/undotree",
 		lazy = true,
 		config = function()
+			vim.cmd("packadd nvim.undotree")
 			local undotree = require("undotree")
 			undotree.setup({})
 			u.nmap("<leader>u", undotree.toggle)
@@ -338,40 +339,66 @@ u.pack({
 		}
 	end,
 	{
-		source = "nvim-treesitter/nvim-treesitter",
-		main = "nvim-treesitter.configs",
-		hooks = {
-			post_checkout = function()
-				vim.cmd("TSUpdate")
-			end,
-		},
-		opts = {
-			ensure_installed = {
-				"lua",
-				"typescript",
-				"javascript",
-				"tsx",
-				"css",
-				"html",
-				"json",
-				"yaml",
-				"zig",
-				"python",
-				"astro",
-				"svelte",
-				"dart",
-				"go",
-				"templ",
-				"http",
-				"ocaml",
-				"vimdoc",
-			},
-			auto_install = false,
-			highlight = { enable = true },
-			indent = { enable = true },
-		},
+		source = "romus204/tree-sitter-manager.nvim",
+		config = function()
+			require("tree-sitter-manager").setup({
+				ensure_installed = {
+					"c",
+					"lua",
+					"typescript",
+					"javascript",
+					"tsx",
+					"css",
+					"html",
+					"json",
+					"yaml",
+					"zig",
+					"python",
+					"astro",
+					"svelte",
+					"dart",
+					"go",
+					"templ",
+					"http",
+					"ocaml",
+					"vimdoc",
+				},
+				auto_install = true,
+				highlight = true,
+			})
+		end,
 	},
 	{ source = "j-hui/fidget.nvim", opts = {} },
+	{
+		source = "saghen/blink.cmp",
+		depends = { "rafamadriz/friendly-snippets" },
+		checkout = "v1.10.1",
+		opts = {
+			sources = {
+				default = { "snippets", "lsp", "path", "buffer" },
+			},
+			signature = { enabled = true },
+			completion = {
+				documentation = {
+					auto_show = true,
+					auto_show_delay_ms = 20,
+				},
+				menu = {
+					draw = {
+						columns = { { "label", "label_description" }, { "kind_icon" } },
+					},
+				},
+			},
+			keymap = {
+				preset = "enter",
+				["<C-d>"] = { "scroll_documentation_down" },
+				["<C-f>"] = { "scroll_documentation_up" },
+				["<Tab>"] = { "select_next", "fallback" },
+				["<S-Tab>"] = { "select_prev", "fallback" },
+				["<A-e>"] = { "cancel" },
+			},
+		},
+	},
 	{
 		source = "neovim/nvim-lspconfig",
 		lazy = false,
@@ -379,7 +406,6 @@ u.pack({
 			"williamboman/mason.nvim",
 			"williamboman/mason-lspconfig.nvim",
 			"WhoIsSethDaniel/mason-tool-installer.nvim",
-			"saghen/blink.cmp",
 			"nvim-flutter/flutter-tools.nvim",
 		},
 		opts = {
@@ -532,36 +558,6 @@ u.pack({
 			lua_ls_integration = true,
 			jsonc_filetype = true,
 			live_reload = false,
-		},
-	},
-	{
-		source = "saghen/blink.cmp",
-		depends = { "rafamadriz/friendly-snippets" },
-		checkout = "v1.8.0",
-		opts = {
-			sources = {
-				default = { "snippets", "lsp", "path", "buffer" },
-			},
-			signature = { enabled = true },
-			completion = {
-				documentation = {
-					auto_show = true,
-					auto_show_delay_ms = 20,
-				},
-				menu = {
-					draw = {
-						columns = { { "label", "label_description" }, { "kind_icon" } },
-					},
-				},
-			},
-			keymap = {
-				preset = "enter",
-				["<C-d>"] = { "scroll_documentation_down" },
-				["<C-f>"] = { "scroll_documentation_up" },
-				["<Tab>"] = { "select_next", "fallback" },
-				["<S-Tab>"] = { "select_prev", "fallback" },
-				["<A-e>"] = { "cancel" },
-			},
 		},
 	},
 	{ source = "folke/neoconf.nvim", lazy = true },
