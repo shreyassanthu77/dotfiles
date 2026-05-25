@@ -623,7 +623,11 @@ u.pack({
 		source = "esmuellert/codediff.nvim",
 		lazy = true,
 		depends = { "MunifTanjim/nui.nvim" },
-		opts = {},
+		opts = {
+			diff = {
+				layout = "inline",
+			},
+		},
 	},
 	{
 		source = "chrisgrieser/nvim-tinygit",
