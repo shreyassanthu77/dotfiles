@@ -431,6 +431,7 @@ u.pack({
 				"lua_ls",
 				"sqlls",
 				"oxlint",
+				"oxfmt",
 				zls = false,
 			},
 			--- @type string[]
@@ -582,11 +583,16 @@ u.pack({
 				markdown = { "mdformat" },
 				templ = { "templ" },
 			},
-			format_on_save = {
-				lsp_format = "fallback",
-				stop_after_first = true,
-				timeout = 500,
-			},
+			format_on_save = function(bufnr)
+				return {
+					filter = vim.bo[bufnr].filetype == "svelte" and function(client)
+						return client.name == "oxfmt"
+					end or nil,
+					lsp_format = "fallback",
+					stop_after_first = true,
+					timeout = 500,
+				}
+			end,
 		},
 	},
 	{
