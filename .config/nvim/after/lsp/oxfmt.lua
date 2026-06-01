@@ -29,6 +29,5 @@ return {
 		"oxfmt.config.cjs",
 		".oxfmtrc.json",
 		".oxfmtrc.jsonc",
-		"package.json",
 	}),
 }

@@ -562,17 +562,24 @@ u.pack({
 		},
 	},
 	{ source = "folke/neoconf.nvim", lazy = true },
-	{
+	function()
+		local function prettierd_unless_denols(bufnr)
+			if next(vim.lsp.get_clients({ bufnr = bufnr, name = "denols" })) then
+				return {}
+			end
+			return { "prettierd" }
+		end
+		return {
 		source = "stevearc/conform.nvim",
 		lazy = true,
 		opts = {
 			formatters_by_ft = {
-				javascript = { "prettierd" },
-				javascriptreact = { "prettierd" },
-				typescript = { "prettierd" },
-				typescriptreact = { "prettierd" },
-				json = { "prettierd" },
-				jsonc = { "prettierd" },
+				javascript = prettierd_unless_denols,
+				javascriptreact = prettierd_unless_denols,
+				typescript = prettierd_unless_denols,
+				typescriptreact = prettierd_unless_denols,
+				json = prettierd_unless_denols,
+				jsonc = prettierd_unless_denols,
 				html = { "prettierd" },
 				css = { "prettierd" },
 				astro = { "prettierd" },
@@ -584,17 +591,32 @@ u.pack({
 				templ = { "templ" },
 			},
 			format_on_save = function(bufnr)
+				-- If oxfmt is attached and can format this buffer, let it take
+				-- precedence over any configured CLI formatters.
+				local oxfmt_attached = #vim.lsp.get_clients({
+					bufnr = bufnr,
+					name = "oxfmt",
+					method = "textDocument/formatting",
+				}) > 0
+				if oxfmt_attached then
+					return {
+						filter = function(client)
+							return client.name == "oxfmt"
+						end,
+						lsp_format = "prefer",
+						stop_after_first = true,
+						timeout_ms = 500,
+					}
+				end
 				return {
-					filter = vim.bo[bufnr].filetype == "svelte" and function(client)
-						return client.name == "oxfmt"
-					end or nil,
 					lsp_format = "fallback",
 					stop_after_first = true,
-					timeout = 500,
+					timeout_ms = 500,
 				}
 			end,
 		},
-	},
+		}
+	end,
 	{
 		source = "supermaven-inc/supermaven-nvim",
 		lazy = true,
