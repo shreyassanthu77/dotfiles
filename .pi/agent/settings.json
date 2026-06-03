@@ -1,0 +1,9 @@
+{
+  "defaultProvider": "github-copilot",
+  "defaultModel": "gpt-5.5",
+  "hideThinkingBlock": true,
+  "packages": [
+    "npm:pi-mcp-adapter",
+    "npm:pi-opencode-bridge"
+  ]
+}

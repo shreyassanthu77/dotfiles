@@ -1,0 +1,35 @@
+# Ignore Pi runtime/generated state by default.
+/*
+
+# Keep this allowlist small and declarative.
+!/.gitignore
+
+# Main config files.
+!/settings.json
+!/keybindings.json
+!/models.json
+
+# Global/project instructions and system prompt overrides.
+!/AGENTS.md
+!/CLAUDE.md
+!/SYSTEM.md
+!/APPEND_SYSTEM.md
+
+# User-authored Pi resources.
+!/prompts/
+!/prompts/**
+!/skills/
+!/skills/**
+!/extensions/
+!/extensions/**
+!/themes/
+!/themes/**
+
+# Common Pi-owned runtime/generated files intentionally stay ignored:
+# auth.json
+# sessions/
+# npm/
+# git/
+# mcp-cache.json
+# mcp-npx-cache.json
+# mcp-onboarding.json

@@ -1,6 +1,7 @@
 \.git
 \.gitignore
 \.gitmodules
+\.stowrc
 
 ^/README.*
 ^/LICENSE.*
