@@ -1,0 +1,13 @@
+#!/bin/bash
+set -euo pipefail
+
+OUT_DIR="$HOME/Media/audio"
+mkdir -p "$OUT_DIR"
+
+FILE="$OUT_DIR/$(date +%Y-%m-%d_%H-%M-%S).flac"
+
+echo "Recording default audio source to: $FILE"
+echo "Press Ctrl+C to stop."
+
+# Record from default PulseAudio/PipeWire source, encode to lossless FLAC 48kHz stereo
+exec ffmpeg -hide_banner -loglevel warning -f pulse -i default -c:a flac -sample_fmt s16 -ar 48000 -ac 2 "$FILE"
