@@ -1,0 +1,18 @@
+#!/bin/bash
+set -euo pipefail
+
+MIC="alsa_input.usb-0c76_USB_PnP_Audio_Device-00.mono-fallback"
+IEMS="alsa_output.usb-KTMicro_Chu2_DSP_2020-02-20-0000-0000-0000-00.analog-stereo"
+NAME="mic-direct-monitor"
+
+if pgrep -a -f "pw-loopback.*--name ${NAME}" >/dev/null 2>&1; then
+    pkill -f "pw-loopback.*--name ${NAME}"
+    echo "mic monitor: off"
+else
+    nohup pw-loopback \
+        --capture "${MIC}" \
+        --playback "${IEMS}" \
+        --latency 2 \
+        --name "${NAME}" >/dev/null 2>&1 &
+    echo "mic monitor: on"
+fi
