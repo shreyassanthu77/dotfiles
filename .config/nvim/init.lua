@@ -365,6 +365,15 @@ u.pack({
 				},
 				auto_install = true,
 				highlight = true,
+				languages = {
+					svelte = {
+						install_info = {
+							revision = "ae5199db47757f785e43a14b332118a5474de1a2",
+							url = "https://github.com/tree-sitter-grammars/tree-sitter-svelte",
+						},
+						requires = { "html" },
+					},
+				},
 			})
 		end,
 	},
@@ -570,51 +579,51 @@ u.pack({
 			return { "prettierd" }
 		end
 		return {
-		source = "stevearc/conform.nvim",
-		lazy = true,
-		opts = {
-			formatters_by_ft = {
-				javascript = prettierd_unless_denols,
-				javascriptreact = prettierd_unless_denols,
-				typescript = prettierd_unless_denols,
-				typescriptreact = prettierd_unless_denols,
-				json = prettierd_unless_denols,
-				jsonc = prettierd_unless_denols,
-				html = { "prettierd" },
-				css = { "prettierd" },
-				astro = { "prettierd" },
-				svelte = {},
-				lua = { "stylua" },
-				python = { "black" },
-				ocaml = { "ocamlformat" },
-				markdown = { "mdformat" },
-				templ = { "templ" },
-			},
-			format_on_save = function(bufnr)
-				-- If oxfmt is attached and can format this buffer, let it take
-				-- precedence over any configured CLI formatters.
-				local oxfmt_attached = #vim.lsp.get_clients({
-					bufnr = bufnr,
-					name = "oxfmt",
-					method = "textDocument/formatting",
-				}) > 0
-				if oxfmt_attached then
+			source = "stevearc/conform.nvim",
+			lazy = true,
+			opts = {
+				formatters_by_ft = {
+					javascript = prettierd_unless_denols,
+					javascriptreact = prettierd_unless_denols,
+					typescript = prettierd_unless_denols,
+					typescriptreact = prettierd_unless_denols,
+					json = prettierd_unless_denols,
+					jsonc = prettierd_unless_denols,
+					html = { "prettierd" },
+					css = { "prettierd" },
+					astro = { "prettierd" },
+					svelte = {},
+					lua = { "stylua" },
+					python = { "black" },
+					ocaml = { "ocamlformat" },
+					markdown = { "mdformat" },
+					templ = { "templ" },
+				},
+				format_on_save = function(bufnr)
+					-- If oxfmt is attached and can format this buffer, let it take
+					-- precedence over any configured CLI formatters.
+					local oxfmt_attached = #vim.lsp.get_clients({
+						bufnr = bufnr,
+						name = "oxfmt",
+						method = "textDocument/formatting",
+					}) > 0
+					if oxfmt_attached then
+						return {
+							filter = function(client)
+								return client.name == "oxfmt"
+							end,
+							lsp_format = "prefer",
+							stop_after_first = true,
+							timeout_ms = 500,
+						}
+					end
 					return {
-						filter = function(client)
-							return client.name == "oxfmt"
-						end,
-						lsp_format = "prefer",
+						lsp_format = "fallback",
 						stop_after_first = true,
 						timeout_ms = 500,
 					}
-				end
-				return {
-					lsp_format = "fallback",
-					stop_after_first = true,
-					timeout_ms = 500,
-				}
-			end,
-		},
+				end,
+			},
 		}
 	end,
 	{
@@ -653,7 +662,7 @@ u.pack({
 		depends = { "MunifTanjim/nui.nvim" },
 		opts = {
 			diff = {
-				layout = "inline",
+				-- layout = "inline",
 			},
 		},
 	},
