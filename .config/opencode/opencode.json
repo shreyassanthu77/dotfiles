@@ -2,6 +2,8 @@
   "$schema": "https://opencode.ai/config.json",
   "autoupdate": false,
   "plugin": [],
-  "provider": {},
-  "mcp": {}
+  "permission": {
+    "external_directory": "allow"
+  },
+  "agent": {}
 }
