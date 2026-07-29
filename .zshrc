@@ -37,9 +37,6 @@ function gi() {
 	curl -sLw "\n" https://www.toptal.com/developers/gitignore/api/$@
 }
 
-# openssl for node js
-addlibpath $HOME/.pkgx/openssl.org/v1.1.1w/lib
-
 export GOPATH=$HOME/go
 export PNPM_HOME="/home/shreyas/.local/share/pnpm"
 
