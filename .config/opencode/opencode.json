@@ -1,9 +1,16 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "autoupdate": false,
-  "plugin": [],
+  "plugin": ["cursor-opencode-provider"],
   "permission": {
     "external_directory": "allow"
+  },
+  "provider": {
+    "cursor": {
+      "npm": "cursor-opencode-provider",
+      "name": "Cursor",
+      "models": {}
+    }
   },
   "agent": {}
 }
