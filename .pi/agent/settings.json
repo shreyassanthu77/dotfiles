@@ -1,9 +1,13 @@
 {
-  "defaultProvider": "github-copilot",
-  "defaultModel": "gpt-5.5",
-  "hideThinkingBlock": true,
+  "hideThinkingBlock": false,
   "packages": [
     "npm:pi-mcp-adapter",
-    "npm:pi-opencode-bridge"
-  ]
+    "npm:pi-opencode-bridge",
+    "npm:@rahularya01/pi-cursor"
+  ],
+  "lastChangelogVersion": "0.83.0",
+  "theme": "dark",
+  "defaultProvider": "cursor",
+  "defaultModel": "composer-2.5",
+  "defaultThinkingLevel": "high"
 }
