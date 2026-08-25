@@ -4,24 +4,22 @@
  * Configurable; not tied to a particular language. Works best on LLVM/GAS
  * text asm (clang, rustc, zig -femit-asm, etc.).
  *
- * Build:  cc -O2 -o filter-asm filter-asm.c
- * Usage:  ./filter-asm [options] < input.s > output.s
- *         ./filter-asm [options] input.s [-o output.s]
- *
- * Default filters match CE defaults for text asm: directives, comments,
- * unused labels. Library-code filtering is opt-in (-L) and needs --user
- * path substrings to classify .file entries as "yours".
+ * Build:  make / make install   (installs to ~/.local/bin)
+ * Usage:  filter-asm [options] [input.s] [-o output.s]
  */
 
+#define _DEFAULT_SOURCE
 #define _POSIX_C_SOURCE 200809L
 
 #include <ctype.h>
 #include <errno.h>
+#include <limits.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 #define MAX_FILES 4096
 #define MAX_USER_PATTERNS 64
@@ -33,11 +31,13 @@ typedef struct {
     bool library;
     bool trim;
     bool keep_data;
+    bool markers;
     /* After seeing user .loc, keep following lines until .cfi_endproc/.section
      * (closer to CE). Default off = strict: only while current .loc is user. */
     bool library_sticky;
-    const char *user_patterns[MAX_USER_PATTERNS];
+    char *user_patterns[MAX_USER_PATTERNS]; /* owned, resolved */
     int n_user_patterns;
+    char *cwd; /* owned absolute cwd */
     const char *input_path;
     const char *output_path;
 } Options;
@@ -54,6 +54,11 @@ typedef struct {
     size_t buflen;
 } Document;
 
+typedef struct {
+    int file_id; /* -1 if unknown */
+    int line;
+} LocInfo;
+
 /* ---------- small helpers ---------- */
 
 static void die(const char *msg) {
@@ -64,6 +69,14 @@ static void die(const char *msg) {
 static void die_errno(const char *msg) {
     fprintf(stderr, "filter-asm: %s: %s\n", msg, strerror(errno));
     exit(1);
+}
+
+static char *xstrdup(const char *s) {
+    size_t n = strlen(s) + 1;
+    char *p = malloc(n);
+    if (!p) die("out of memory");
+    memcpy(p, s, n);
+    return p;
 }
 
 static const char *skip_ws(const char *s) {
@@ -79,19 +92,53 @@ static bool str_contains(const char *hay, const char *needle) {
     return needle[0] == '\0' || strstr(hay, needle) != NULL;
 }
 
-/* CE-ish "main source" names when no --user given */
-static bool is_default_main_source(const char *path) {
+static bool is_builtin_main_source(const char *path) {
     if (strcmp(path, "<stdin>") == 0 || strcmp(path, "<source>") == 0 || strcmp(path, "-") == 0)
         return true;
-    /* example.c / example.zig etc at end of path */
     const char *base = strrchr(path, '/');
     base = base ? base + 1 : path;
     return starts_with(base, "example.");
 }
 
+/* Resolve -u pattern: "." and "./..." are relative to cwd. */
+static char *resolve_user_pattern(const char *cwd, const char *pat) {
+    if (strcmp(pat, ".") == 0) {
+        return xstrdup(cwd);
+    }
+    if (starts_with(pat, "./")) {
+        size_t n = strlen(cwd) + 1 + strlen(pat + 2) + 1;
+        char *joined = malloc(n);
+        if (!joined) die("out of memory");
+        snprintf(joined, n, "%s/%s", cwd, pat + 2);
+        char *rp = realpath(joined, NULL);
+        if (rp) {
+            free(joined);
+            return rp;
+        }
+        return joined;
+    }
+    /* Absolute or plain substring (e.g. "/src/", "main.zig") */
+    if (pat[0] == '/') {
+        char *rp = realpath(pat, NULL);
+        if (rp) return rp;
+    }
+    return xstrdup(pat);
+}
+
+static void add_user_pattern(Options *opt, const char *pat) {
+    if (opt->n_user_patterns >= MAX_USER_PATTERNS) die("too many --user patterns");
+    char *resolved = resolve_user_pattern(opt->cwd, pat);
+    for (int i = 0; i < opt->n_user_patterns; i++) {
+        if (strcmp(opt->user_patterns[i], resolved) == 0) {
+            free(resolved);
+            return;
+        }
+    }
+    opt->user_patterns[opt->n_user_patterns++] = resolved;
+}
+
 static bool path_is_user(const Options *opt, const char *path) {
-    if (opt->n_user_patterns == 0)
-        return is_default_main_source(path);
+    if (is_builtin_main_source(path)) return true;
     for (int i = 0; i < opt->n_user_patterns; i++) {
         if (str_contains(path, opt->user_patterns[i]))
             return true;
@@ -99,7 +146,21 @@ static bool path_is_user(const Options *opt, const char *path) {
     return false;
 }
 
-/* ---------- string set (open addressing via linear scan; fine for label sets) ---------- */
+/* Prefer path relative to cwd for display. */
+static const char *display_path(const Options *opt, const char *path, char *buf, size_t buflen) {
+    size_t cwd_len = strlen(opt->cwd);
+    if (starts_with(path, opt->cwd) && (path[cwd_len] == '/' || path[cwd_len] == '\0')) {
+        const char *rel = path + cwd_len;
+        while (*rel == '/') rel++;
+        if (*rel) {
+            snprintf(buf, buflen, "%s", rel);
+            return buf;
+        }
+    }
+    return path;
+}
+
+/* ---------- string set ---------- */
 
 static uint32_t fnv1a(const char *s, size_t n) {
     uint32_t h = 2166136261u;
@@ -110,7 +171,6 @@ static uint32_t fnv1a(const char *s, size_t n) {
     return h;
 }
 
-/* Simple hash set of interned slices into the document (not owned). */
 typedef struct {
     const char **keys;
     size_t *lens;
@@ -146,7 +206,6 @@ static void hashset_grow(HashSet *h) {
     h->n = 0;
     for (size_t i = 0; i < ocap; i++) {
         if (!okeys[i]) continue;
-        /* reinsert */
         uint32_t hash = fnv1a(okeys[i], olens[i]);
         size_t slot = hash & (h->cap - 1);
         while (h->keys[slot]) slot = (slot + 1) & (h->cap - 1);
@@ -217,7 +276,6 @@ static bool is_directive(const char *line) {
     return *skip_ws(line) == '.';
 }
 
-/* label at start:  foo:  or "foo.bar": */
 static bool match_label_def(const char *line, const char **name, size_t *namelen) {
     const char *s = skip_ws(line);
     const char *start = s;
@@ -236,7 +294,6 @@ static bool match_label_def(const char *line, const char **name, size_t *namelen
     while (isalnum((unsigned char)*s) || *s == '_' || *s == '.' || *s == '$' || *s == '@')
         s++;
     if (*s != ':') return false;
-    /* whole-line label (ignore "1: instr" local labels with trailing code) */
     const char *rest = skip_ws(s + 1);
     if (*rest != '\0') return false;
     *name = start;
@@ -244,7 +301,6 @@ static bool match_label_def(const char *line, const char **name, size_t *namelen
     return true;
 }
 
-/* `sym = expr` linker/asm alias (not an instruction). */
 static bool is_assignment(const char *line) {
     const char *s = skip_ws(line);
     if (*s == '"') {
@@ -264,7 +320,6 @@ static bool is_assignment(const char *line) {
 
 static bool has_opcode(const char *line) {
     const char *s = skip_ws(line);
-    /* strip leading label on same line */
     if (*s == '"') {
         const char *p = s + 1;
         while (*p && *p != '"') p++;
@@ -275,24 +330,16 @@ static bool has_opcode(const char *line) {
             p++;
         if (*p == ':') s = skip_ws(p + 1);
     }
-    /* strip comments */
     const char *code_end = s;
     while (*code_end && *code_end != '#' && *code_end != ';') code_end++;
     while (s < code_end && (*s == ' ' || *s == '\t')) s++;
     if (s >= code_end) return false;
-    if (*s == '.') {
-        /* .inst counts */
-        return starts_with(s, ".inst");
-    }
+    if (*s == '.') return starts_with(s, ".inst");
     if (is_assignment(line)) return false;
-    /* LLVM / GAS: opcode starts with letter or % */
     return isalpha((unsigned char)*s) || *s == '%';
 }
 
-/* Extract identifier tokens that look like label refs from an instruction line. */
 static void collect_label_refs(const char *line, HashSet *used) {
-    const char *s = line;
-    /* skip comment */
     size_t len = strlen(line);
     size_t code_len = len;
     for (size_t i = 0; i < len; i++) {
@@ -301,9 +348,8 @@ static void collect_label_refs(const char *line, HashSet *used) {
             break;
         }
     }
-    s = line;
+    const char *s = line;
     const char *end = line + code_len;
-    /* skip instruction mnemonic */
     s = skip_ws(s);
     while (s < end && (isalnum((unsigned char)*s) || *s == '%' || *s == '.' || *s == '_'))
         s++;
@@ -321,7 +367,6 @@ static void collect_label_refs(const char *line, HashSet *used) {
             s++;
             while (s < end && (isalnum((unsigned char)*s) || *s == '_' || *s == '.' || *s == '$' || *s == '@'))
                 s++;
-            /* skip register-ish tiny tokens? keep all; unused filter is conservative */
             hashset_add(used, a, (size_t)(s - a));
             continue;
         }
@@ -354,7 +399,6 @@ static Document load_document(FILE *fp) {
     }
     doc.buf[doc.buflen] = '\0';
 
-    /* count lines */
     size_t lines_cap = 1024;
     doc.lines = malloc(lines_cap * sizeof *doc.lines);
     if (!doc.lines) die("out of memory");
@@ -372,7 +416,6 @@ static Document load_document(FILE *fp) {
             doc.lines[doc.nlines++] = p + 1;
         }
     }
-    /* strip CR */
     for (size_t i = 0; i < doc.nlines; i++) {
         size_t L = strlen(doc.lines[i]);
         if (L > 0 && doc.lines[i][L - 1] == '\r')
@@ -384,14 +427,10 @@ static Document load_document(FILE *fp) {
 /* ---------- .file / .loc parsing ---------- */
 
 static void parse_file_directive(const char *line, FileInfo *files, const Options *opt) {
-    /* .file <id> "dir" "name"   OR   .file "path" */
     const char *s = skip_ws(line);
     if (!starts_with(s, ".file")) return;
     s = skip_ws(s + 5);
-    if (*s == '"') {
-        /* single-arg form — not numbered; ignore for .loc mapping */
-        return;
-    }
+    if (*s == '"') return;
     char *end = NULL;
     long id = strtol(s, &end, 10);
     if (end == s || id < 0 || id >= MAX_FILES) return;
@@ -404,7 +443,6 @@ static void parse_file_directive(const char *line, FileInfo *files, const Option
     size_t dir_len = (size_t)(s - dir);
     s = skip_ws(s + 1);
     if (*s != '"') {
-        /* .file id "path" */
         char *path = malloc(dir_len + 1);
         if (!path) die("out of memory");
         memcpy(path, dir, dir_len);
@@ -430,14 +468,20 @@ static void parse_file_directive(const char *line, FileInfo *files, const Option
     files[id].is_user = path_is_user(opt, path);
 }
 
-static bool parse_loc_file_id(const char *line, int *file_id) {
+/* .loc <file> <line> <column> ... */
+static bool parse_loc(const char *line, int *file_id, int *src_line) {
     const char *s = skip_ws(line);
     if (!starts_with(s, ".loc")) return false;
+    if (s[4] != ' ' && s[4] != '\t') return false;
     s = skip_ws(s + 4);
     char *end = NULL;
     long id = strtol(s, &end, 10);
     if (end == s) return false;
+    s = skip_ws(end);
+    long ln = strtol(s, &end, 10);
+    if (end == s) return false;
     *file_id = (int)id;
+    *src_line = (int)ln;
     return true;
 }
 
@@ -450,7 +494,6 @@ static bool is_block_end(const char *line) {
 /* ---------- trim ---------- */
 
 static void squash_spaces(const char *in, char *out) {
-    /* leading indent -> at most 2 spaces; collapse runs elsewhere; preserve "strings" */
     const char *s = in;
     char *d = out;
     bool at_start = true;
@@ -471,7 +514,6 @@ static void squash_spaces(const char *in, char *out) {
         }
         if (*s == ' ' || *s == '\t') {
             if (at_start) {
-                /* count indent */
                 int n = 0;
                 while (*s == ' ' || *s == '\t') {
                     n += (*s == '\t') ? 4 : 1;
@@ -493,7 +535,7 @@ static void squash_spaces(const char *in, char *out) {
     *d = '\0';
 }
 
-/* ---------- main filter ---------- */
+/* ---------- CLI ---------- */
 
 static void usage(FILE *fp) {
     fprintf(fp,
@@ -505,15 +547,16 @@ static void usage(FILE *fp) {
         "  -l / --labels         strip unused labels (default on)\n"
         "  -t / --trim           squash horizontal whitespace (default off)\n"
         "  -L / --library        strip non-user code via .file/.loc (default off)\n"
+        "  -m / --markers        emit # file:line block markers (default on)\n"
         "  --keep-data           with -d, still keep .ascii/.quad/etc after kept labels\n"
         "  --library-sticky      with -L, keep code after user .loc until next proc end\n"
-        "                        (closer to CE; default is strict current-.loc only)\n"
         "\n"
-        "  --no-directives / --no-comments / --no-labels / --no-library\n"
+        "  --no-directives / --no-comments / --no-labels / --no-library / --no-markers\n"
         "\n"
         "User-source classification for -L (repeatable):\n"
         "  -u / --user SUBSTR    .file path containing SUBSTR is user code\n"
-        "                        If none given, only <stdin>/<source>/example.* count\n"
+        "                        '.' and './path' are resolved against $PWD\n"
+        "                        PWD is always included by default\n"
         "\n"
         "  -h / --help           show this help\n");
 }
@@ -526,8 +569,19 @@ static Options parse_args(int argc, char **argv) {
         .library = false,
         .trim = false,
         .keep_data = false,
+        .markers = true,
         .library_sticky = false,
     };
+
+    char cwd_buf[PATH_MAX];
+    if (!getcwd(cwd_buf, sizeof cwd_buf)) die_errno("getcwd");
+    char *rp = realpath(cwd_buf, NULL);
+    opt.cwd = rp ? rp : xstrdup(cwd_buf);
+
+    /* Collect raw -u values first, then resolve after cwd is known. */
+    const char *raw_users[MAX_USER_PATTERNS];
+    int n_raw = 0;
+
     for (int i = 1; i < argc; i++) {
         const char *a = argv[i];
         if (strcmp(a, "-h") == 0 || strcmp(a, "--help") == 0) {
@@ -551,14 +605,18 @@ static Options parse_args(int argc, char **argv) {
             opt.library = true;
         } else if (strcmp(a, "--no-library") == 0) {
             opt.library = false;
+        } else if (strcmp(a, "-m") == 0 || strcmp(a, "--markers") == 0) {
+            opt.markers = true;
+        } else if (strcmp(a, "--no-markers") == 0) {
+            opt.markers = false;
         } else if (strcmp(a, "--keep-data") == 0) {
             opt.keep_data = true;
         } else if (strcmp(a, "--library-sticky") == 0) {
             opt.library_sticky = true;
         } else if (strcmp(a, "-u") == 0 || strcmp(a, "--user") == 0) {
             if (++i >= argc) die("--user needs an argument");
-            if (opt.n_user_patterns >= MAX_USER_PATTERNS) die("too many --user patterns");
-            opt.user_patterns[opt.n_user_patterns++] = argv[i];
+            if (n_raw >= MAX_USER_PATTERNS) die("too many --user patterns");
+            raw_users[n_raw++] = argv[i];
         } else if (strcmp(a, "-o") == 0) {
             if (++i >= argc) die("-o needs an argument");
             opt.output_path = argv[i];
@@ -572,6 +630,12 @@ static Options parse_args(int argc, char **argv) {
             die("unexpected extra argument");
         }
     }
+
+    /* PWD is always a default -u pattern. */
+    add_user_pattern(&opt, ".");
+    for (int i = 0; i < n_raw; i++)
+        add_user_pattern(&opt, raw_users[i]);
+
     return opt;
 }
 
@@ -589,51 +653,48 @@ int main(int argc, char **argv) {
     FileInfo files[MAX_FILES];
     memset(files, 0, sizeof files);
 
-    /* Pass A: parse .file table */
     for (size_t i = 0; i < doc.nlines; i++)
         parse_file_directive(doc.lines[i], files, &opt);
 
-    if (opt.library && opt.n_user_patterns == 0) {
-        fprintf(stderr,
-            "filter-asm: warning: -L enabled but no --user patterns; "
-            "only <stdin>/<source>/example.* count as user code\n");
-    }
-
-    /* Pass B: decide library-skip per line (before stripping directives) */
+    LocInfo *locs = calloc(doc.nlines, sizeof *locs);
     bool *lib_skip = calloc(doc.nlines, sizeof *lib_skip);
-    if (!lib_skip) die("out of memory");
+    if (!locs || !lib_skip) die("out of memory");
 
-    if (opt.library) {
+    /* Track .loc for every line; optionally mark library skips. */
+    {
         int cur_file = -1;
+        int cur_line = 0;
         bool cur_user = false;
         bool sticky_user = false;
         for (size_t i = 0; i < doc.nlines; i++) {
             const char *line = doc.lines[i];
-            int fid;
-            if (parse_loc_file_id(line, &fid)) {
+            int fid, ln;
+            if (parse_loc(line, &fid, &ln)) {
                 cur_file = fid;
+                cur_line = ln;
                 cur_user = (fid >= 0 && fid < MAX_FILES && files[fid].path && files[fid].is_user);
                 if (cur_user) sticky_user = true;
-                lib_skip[i] = true; /* .loc itself is a directive; mark skip for library pass */
+                locs[i].file_id = cur_file;
+                locs[i].line = cur_line;
+                lib_skip[i] = true; /* .loc is a directive */
                 continue;
             }
             if (is_block_end(line)) {
                 sticky_user = false;
                 cur_user = false;
                 cur_file = -1;
+                cur_line = 0;
             }
+            locs[i].file_id = cur_file;
+            locs[i].line = cur_line;
 
-            bool user_here = cur_user || (opt.library_sticky && sticky_user);
-            /* No .loc yet / unknown: keep (same idea as CE when source is null) */
-            if (cur_file < 0) {
-                lib_skip[i] = false;
-            } else {
-                lib_skip[i] = !user_here;
+            if (opt.library) {
+                bool user_here = cur_user || (opt.library_sticky && sticky_user);
+                lib_skip[i] = (cur_file >= 0) && !user_here;
             }
         }
     }
 
-    /* Pass C: collect label refs from lines we will keep as code */
     HashSet used;
     memset(&used, 0, sizeof used);
     hashset_init(&used, 1024);
@@ -641,7 +702,6 @@ int main(int argc, char **argv) {
     bool *keep = calloc(doc.nlines, sizeof *keep);
     if (!keep) die("out of memory");
 
-    /* First decide keep ignoring unused-label filter; then refine labels. */
     const char *prev_kept_label = NULL;
 
     for (size_t i = 0; i < doc.nlines; i++) {
@@ -649,7 +709,7 @@ int main(int argc, char **argv) {
         const char *t = skip_ws(line);
 
         if (*t == '\0') {
-            keep[i] = true; /* blank lines; may compact later */
+            keep[i] = true;
             continue;
         }
         if (opt.library && lib_skip[i]) {
@@ -666,22 +726,16 @@ int main(int argc, char **argv) {
         bool is_lab = match_label_def(line, &lname, &llen);
 
         if (opt.directives && is_directive(line) && !is_lab) {
-            if (opt.keep_data && is_data_defn(line) && prev_kept_label) {
-                keep[i] = true;
-            } else {
-                keep[i] = false;
-            }
+            keep[i] = opt.keep_data && is_data_defn(line) && prev_kept_label;
             continue;
         }
 
-        /* Alias assignments are noise for asm view; drop with directives filter. */
         if (opt.directives && is_assignment(line)) {
             keep[i] = false;
             continue;
         }
 
         if (is_lab) {
-            /* tentatively keep; unused filter may drop */
             keep[i] = true;
             prev_kept_label = lname;
             continue;
@@ -692,7 +746,6 @@ int main(int argc, char **argv) {
             collect_label_refs(line, &used);
     }
 
-    /* Also mark .globl/.global/.weak/.type names as used when directives kept */
     if (!opt.directives) {
         for (size_t i = 0; i < doc.nlines; i++) {
             if (!keep[i]) continue;
@@ -708,7 +761,7 @@ int main(int argc, char **argv) {
             if (*a == '"') {
                 a++;
                 while (a[n] && a[n] != '"') n++;
-                hashset_add(&used, kw, n + 2); /* include quotes — label defs may be quoted */
+                hashset_add(&used, kw, n + 2);
             } else {
                 while (a[n] && !isspace((unsigned char)a[n]) && a[n] != ',') n++;
                 hashset_add(&used, a, n);
@@ -727,8 +780,6 @@ int main(int argc, char **argv) {
         }
     }
 
-    /* Drop label defs with no kept body before the next kept label
-     * (common with -L when a call target is used but its body is library). */
     for (size_t i = 0; i < doc.nlines; i++) {
         if (!keep[i]) continue;
         const char *lname = NULL;
@@ -756,18 +807,35 @@ int main(int argc, char **argv) {
     size_t kept = 0, skipped = 0;
     char *trim_buf = NULL;
     size_t trim_cap = 0;
+    char path_buf[PATH_MAX];
+    int last_marker_file = -2;
+    int last_marker_line = -2;
 
     for (size_t i = 0; i < doc.nlines; i++) {
         if (!keep[i]) {
             skipped++;
             continue;
         }
-        /* drop blank lines at start / collapse? keep blanks that separate kept code */
         const char *line = doc.lines[i];
-        if (*skip_ws(line) == '\0') {
-            /* keep blank only if previous emitted line was non-blank */
-            continue; /* omit blanks for denser CE-like output */
+        if (*skip_ws(line) == '\0')
+            continue;
+
+        if (opt.markers) {
+            int fid = locs[i].file_id;
+            int ln = locs[i].line;
+            if (fid >= 0 && fid < MAX_FILES && files[fid].path &&
+                (fid != last_marker_file || ln != last_marker_line)) {
+                const char *shown = display_path(&opt, files[fid].path, path_buf, sizeof path_buf);
+                if (ln > 0)
+                    fprintf(out, "# %s:%d\n", shown, ln);
+                else
+                    fprintf(out, "# %s\n", shown);
+                last_marker_file = fid;
+                last_marker_line = ln;
+                kept++;
+            }
         }
+
         if (opt.trim) {
             size_t need = strlen(line) + 1;
             if (need > trim_cap) {
@@ -791,8 +859,11 @@ int main(int argc, char **argv) {
     free(trim_buf);
     free(keep);
     free(lib_skip);
+    free(locs);
     hashset_free(&used);
     for (int i = 0; i < MAX_FILES; i++) free(files[i].path);
+    for (int i = 0; i < opt.n_user_patterns; i++) free(opt.user_patterns[i]);
+    free(opt.cwd);
     free(doc.lines);
     free(doc.buf);
     return 0;
