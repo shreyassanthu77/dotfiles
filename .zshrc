@@ -44,6 +44,7 @@ export CHROME_EXECUTABLE=$(which chromium)
 PATHS=(
 	"$GOPATH/bin"
 	"$PNPM_HOME"
+	"$HOME/.npm-global/bin"
 	"$HOME/.pulumi/bin"
 	"$HOME/.cargo/bin"
 	"$HOME/.bun/bin"
