@@ -1,0 +1,34 @@
+{
+  "theme": {
+    "name": "vercel"
+  },
+  "keybinds": {
+    "leader": "ctrl+l",
+    "session.half.page.up": "ctrl+u",
+    "session.half.page.down": "ctrl+d"
+  },
+  "scroll": {
+    "speed": 3,
+    "acceleration": true
+  },
+  "diffs": {
+    "wrap": "word",
+    "view": "unified"
+  },
+  "session": {
+    "sidebar": "hide",
+    "scrollbar": false,
+    "thinking": "hide",
+    "tabs": false
+  },
+  "animations": true,
+  "debug": {
+    "devtools": false,
+    "turn_tokens": false
+  },
+  "tabs": {
+    "layout": "horizontal",
+    "scope": "cwd",
+    "enabled": false
+  }
+}
