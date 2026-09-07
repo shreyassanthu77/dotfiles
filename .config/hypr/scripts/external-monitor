@@ -1,0 +1,28 @@
+#!/bin/bash
+# Turn the built-in panel off while an external monitor is connected and back
+# on when it is unplugged. Listens to Hyprland events forever; does nothing on
+# machines that have no built-in panel.
+INTERNAL="${INTERNAL_MONITOR:-eDP-1}"
+
+apply() {
+  local names
+  names=$(hyprctl -j monitors all | jq -r '.[].name')
+  grep -qx "$INTERNAL" <<<"$names" || return 0          # no built-in panel here
+  if grep -vqx "$INTERNAL" <<<"$names"; then             # something else is connected
+    hyprctl -q keyword monitor "$INTERNAL,disable"
+  else
+    hyprctl -q keyword monitor "$INTERNAL,highrr,auto,1"
+  fi
+}
+
+apply
+SOCK="$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock"
+python3 - "$SOCK" <<'PY' | while read -r ev; do
+import socket, sys
+s = socket.socket(socket.AF_UNIX)
+s.connect(sys.argv[1])
+for line in s.makefile():
+    print(line, end="", flush=True)
+PY
+  case "$ev" in monitoradded*|monitorremoved*|configreloaded*) sleep 0.5; apply ;; esac
+done

@@ -42,6 +42,7 @@ export PNPM_HOME="/home/shreyas/.local/share/pnpm"
 
 export CHROME_EXECUTABLE=$(command -v chromium 2>/dev/null)
 PATHS=(
+	"$HOME/.local/bin"
 	"$GOPATH/bin"
 	"$PNPM_HOME"
 	"$HOME/.npm-global/bin"
