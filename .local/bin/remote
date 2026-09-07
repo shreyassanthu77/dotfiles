@@ -17,7 +17,7 @@ port=$(shuf -i 20000-60000 -n 1)
 sock="${XDG_RUNTIME_DIR:-/tmp}/waypipe-$port.sock"
 rsock="/run/user/1000/waypipe-$port.sock"
 
-waypipe "${OPTS[@]}" --title-prefix "[remote] " --oneshot --socket "$sock" client &
+waypipe "${OPTS[@]}" --title-prefix "[remote] " --socket "$sock" client &
 cpid=$!
 for _ in $(seq 50); do [ -S "$sock" ] && break; sleep 0.1; done
 trap 'kill $cpid 2>/dev/null; rm -f "$sock"' EXIT
