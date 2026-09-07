@@ -18,7 +18,7 @@ esac
 # DMABUF (GPU) surfaces are the slow path in waypipe: whole frames get re-encoded and
 # browsers lag badly. --no-gpu makes the app render to shm, which waypipe diffs
 # and sends only the damaged regions. REMOTE_GPU=1 keeps the GPU path for e.g. video.
-OPTS=(--compress lz4)
+OPTS=(--compress lz4 ${REMOTE_DEBUG:+--debug})
 SOPTS=()
 if [ -n "$REMOTE_GPU" ]; then
   OPTS+=(--video "h264${REMOTE_BPF:+,bpf=$REMOTE_BPF}")  # REMOTE_BPF=3e6 caps video at 3 Mbit/s for weak wifi
