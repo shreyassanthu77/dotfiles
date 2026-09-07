@@ -40,7 +40,7 @@ function gi() {
 export GOPATH=$HOME/go
 export PNPM_HOME="/home/shreyas/.local/share/pnpm"
 
-export CHROME_EXECUTABLE=$(which chromium)
+export CHROME_EXECUTABLE=$(command -v chromium 2>/dev/null)
 PATHS=(
 	"$GOPATH/bin"
 	"$PNPM_HOME"
@@ -62,21 +62,17 @@ done
 
 export ANDROID_HOME=$HOME/Android/Sdk
 
-# zig version manager
-if [ ! -d "$HOME/.zvm" ]; then
-	echo "Zig Version Manager not installed. Do you want to install it? (y/n)"
-	read -q
-	echo "Installing Zig Version Manager..."
-	curl https://raw.githubusercontent.com/tristanisham/zvm/master/install.sh | bash
+# zig version manager (install: curl https://raw.githubusercontent.com/tristanisham/zvm/master/install.sh | bash)
+if [ -d "$HOME/.zvm" ]; then
+	export ZVM_INSTALL="$HOME/.zvm/self"
+	addpath $HOME/.zvm/bin
+	addpath $ZVM_INSTALL
 fi
-export ZVM_INSTALL="$HOME/.zvm/self"
-addpath $HOME/.zvm/bin
-addpath $ZVM_INSTALL
 
 
-source <(pkgx --shellcode)
-source <(caddy completion zsh)
-source <(jj util completion zsh)
+command -v pkgx >/dev/null && source <(pkgx --shellcode)
+command -v caddy >/dev/null && source <(caddy completion zsh)
+command -v jj >/dev/null && source <(jj util completion zsh)
 
 function lockfix() {
 	hyprctl --instance 0 'keyword misc:allow_session_lock_restore 1'
@@ -89,4 +85,4 @@ function lockfix() {
 [[ -f /home/shreyas/.dart-cli-completion/zsh-config.zsh ]] && . /home/shreyas/.dart-cli-completion/zsh-config.zsh || true
 ## [/Completion]
 
-export PATH="/home/shreyas/.shorebird/bin:$PATH"
+[ -d "$HOME/.shorebird/bin" ] && export PATH="$HOME/.shorebird/bin:$PATH"

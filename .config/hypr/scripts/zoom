@@ -1,0 +1,14 @@
+#!/bin/bash
+# cursor zoom helper: -i zoom in, -o zoom out, -t toggle
+STATE_FILE="/tmp/zoom_state"
+STEP=0.2
+[ -f "$STATE_FILE" ] || echo "1.0 1" > "$STATE_FILE"
+read -r val tog < "$STATE_FILE"
+case "$1" in
+  -i) val=$(awk "BEGIN {print $val + $STEP}"); tog=0 ;;
+  -o) val=$(awk "BEGIN {v = $val - $STEP; print (v < 1.0 ? 1.0 : v)}"); tog=0 ;;
+  -t) tog=$((1 - tog)) ;;
+  *) echo "usage: $0 {-i|-o|-t}"; exit 1 ;;
+esac
+echo "$val $tog" > "$STATE_FILE"
+if [ "$tog" -eq 1 ]; then hyprctl -q keyword cursor:zoom_factor 1.0; else hyprctl -q keyword cursor:zoom_factor "$val"; fi

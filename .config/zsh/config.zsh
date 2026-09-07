@@ -4,7 +4,7 @@ bindkey -e
 bindkey '^p' history-search-backward
 bindkey '^n' history-search-forward
 
-eval "$(zoxide init --cmd cd zsh)"
+command -v zoxide >/dev/null && eval "$(zoxide init --cmd cd zsh)"
 
 # History
 HISTSIZE=5000

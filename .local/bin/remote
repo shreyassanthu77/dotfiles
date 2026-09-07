@@ -1,0 +1,10 @@
+#!/bin/bash
+# Run a GUI app on the main PC and show it here via waypipe.
+#   remote zen-browser      remote kitty      remote nautilus ~/Downloads
+# Browser gets its own profile so it does not attach to the instance on the main PC's screen.
+HOST="${REMOTE_HOST:-100.71.208.52}"
+[ $# -gt 0 ] || { echo "usage: remote <app> [args]"; exit 1; }
+case "$1" in
+  zen-browser|firefox) set -- "$1" --no-remote --profile "$HOME/.$1-remote" "${@:2}" ;;
+esac
+exec waypipe --compress lz4 --video h264 ssh -o ServerAliveInterval=15 "shreyas@$HOST" "$@"
