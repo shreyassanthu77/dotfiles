@@ -13,7 +13,9 @@
   },
   "diffs": {
     "wrap": "word",
-    "view": "unified"
+    "view": "unified",
+    "single": false,
+    "tree": true
   },
   "session": {
     "sidebar": "hide",
