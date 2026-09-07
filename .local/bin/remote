@@ -1,10 +1,29 @@
 #!/bin/bash
 # Run a GUI app on the main PC and show it here via waypipe.
 #   remote zen-browser      remote kitty      remote nautilus ~/Downloads
+#
+# Tailscale SSH creates forwarded unix sockets as root, so waypipe's built-in
+# ssh mode cannot connect to them. Instead we forward a TCP port over ssh and
+# bridge it to a unix socket with socat on the far side.
 # Browser gets its own profile so it does not attach to the instance on the main PC's screen.
 HOST="${REMOTE_HOST:-100.71.208.52}"
 [ $# -gt 0 ] || { echo "usage: remote <app> [args]"; exit 1; }
 case "$1" in
   zen-browser|firefox) set -- "$1" --no-remote --profile "$HOME/.$1-remote" "${@:2}" ;;
 esac
-exec waypipe --compress lz4 --video h264 ssh -o ServerAliveInterval=15 "shreyas@$HOST" "$@"
+
+OPTS=(--compress lz4 --video h264)
+port=$(shuf -i 20000-60000 -n 1)
+sock="${XDG_RUNTIME_DIR:-/tmp}/waypipe-$port.sock"
+rsock="/run/user/1000/waypipe-$port.sock"
+
+waypipe "${OPTS[@]}" --title-prefix "[remote] " --oneshot --socket "$sock" client &
+cpid=$!
+for _ in $(seq 50); do [ -S "$sock" ] && break; sleep 0.1; done
+trap 'kill $cpid 2>/dev/null; rm -f "$sock"' EXIT
+
+cmd=$(printf '%q ' "$@")
+ssh -o ServerAliveInterval=15 -o ExitOnForwardFailure=yes \
+    -R "127.0.0.1:$port:$sock" "shreyas@$HOST" \
+    "socat UNIX-LISTEN:$rsock,unlink-early TCP:127.0.0.1:$port & sp=\$!; sleep 0.3; \
+     waypipe ${OPTS[*]@Q} --unlink-socket --socket $rsock server -- $cmd; kill \$sp 2>/dev/null"
