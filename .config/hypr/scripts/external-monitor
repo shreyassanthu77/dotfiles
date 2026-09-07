@@ -13,6 +13,10 @@ apply() {
   else
     hyprctl -q keyword monitor "$INTERNAL,highrr,auto,1"
   fi
+  # hyprpaper keeps its surface at the old monitor position after a layout change
+  if pgrep -x hyprpaper >/dev/null; then
+    sleep 1; pkill -x hyprpaper; setsid -f hyprpaper >/dev/null 2>&1
+  fi
 }
 
 apply
