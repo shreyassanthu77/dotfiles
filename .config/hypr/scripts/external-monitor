@@ -4,29 +4,38 @@
 # machines that have no built-in panel.
 INTERNAL="${INTERNAL_MONITOR:-eDP-1}"
 
+# Returns 0 if it changed the layout, 1 if nothing needed doing.
 apply() {
-  local names
-  names=$(hyprctl -j monitors all | jq -r '.[].name')
-  grep -qx "$INTERNAL" <<<"$names" || return 0          # no built-in panel here
-  if grep -vqx "$INTERNAL" <<<"$names"; then             # something else is connected
+  local json disabled others
+  json=$(hyprctl -j monitors all)
+  disabled=$(jq -r --arg i "$INTERNAL" '.[] | select(.name == $i) | .disabled' <<<"$json")
+  [ -n "$disabled" ] || return 1                                  # no built-in panel here
+  others=$(jq -r --arg i "$INTERNAL" '[.[] | select(.name != $i)] | length' <<<"$json")
+  if (( others > 0 )) && [ "$disabled" = false ]; then
     hyprctl -q keyword monitor "$INTERNAL,disable"
-  else
+  elif (( others == 0 )) && [ "$disabled" = true ]; then
     hyprctl -q keyword monitor "$INTERNAL,highrr,auto,1"
-  fi
-  # hyprpaper keeps its surface at the old monitor position after a layout change
-  if pgrep -x hyprpaper >/dev/null; then
-    sleep 1; pkill -x hyprpaper; setsid -f hyprpaper >/dev/null 2>&1
+  else
+    return 1
   fi
 }
 
-apply
 SOCK="$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock"
 python3 - "$SOCK" <<'PY' | while read -r ev; do
 import socket, sys
 s = socket.socket(socket.AF_UNIX)
 s.connect(sys.argv[1])
+print("connected", flush=True)
 for line in s.makefile():
     print(line, end="", flush=True)
 PY
-  case "$ev" in monitoradded*|monitorremoved*|configreloaded*) sleep 0.5; apply ;; esac
+  case "$ev" in connected|monitoradded*|monitorremoved*|configreloaded*) ;; *) continue ;; esac
+  while read -t 1 -r _; do :; done                                # let the burst settle
+  if apply; then
+    continue        # our change emits its own event; the next round handles the wallpaper
+  fi
+  # hyprpaper leaves its surface at the old monitor position after a layout change
+  if [ "$ev" != connected ] && pgrep -x hyprpaper >/dev/null; then
+    pkill -x hyprpaper; setsid -f hyprpaper >/dev/null 2>&1
+  fi
 done
