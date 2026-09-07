@@ -7,3 +7,6 @@
 ^/LICENSE.*
 ^/COPYING
 
+
+# dead config, contains an absolute symlink stow refuses
+ags
