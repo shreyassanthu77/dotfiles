@@ -20,7 +20,11 @@ esac
 # and sends only the damaged regions. REMOTE_GPU=1 keeps the GPU path for e.g. video.
 OPTS=(--compress lz4)
 SOPTS=()
-[ -n "$REMOTE_GPU" ] && OPTS+=(--video h264) || SOPTS+=(--no-gpu)
+if [ -n "$REMOTE_GPU" ]; then
+  OPTS+=(--video "h264${REMOTE_BPF:+,bpf=$REMOTE_BPF}")  # REMOTE_BPF=3e6 caps video at 3 Mbit/s for weak wifi
+else
+  SOPTS+=(--no-gpu)
+fi
 port=$(shuf -i 20000-60000 -n 1)
 sock="${XDG_RUNTIME_DIR:-/tmp}/waypipe-$port.sock"
 rsock="/run/user/1000/waypipe-$port.sock"
