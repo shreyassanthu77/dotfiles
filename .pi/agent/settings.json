@@ -3,11 +3,9 @@
   "packages": [
     "npm:pi-mcp-adapter",
     "npm:pi-opencode-bridge",
-    "npm:@rahularya01/pi-cursor"
+    "npm:@cgaravitoq/pi-claude-code-auth"
   ],
-  "lastChangelogVersion": "0.83.0",
+  "lastChangelogVersion": "0.85.1",
   "theme": "dark",
-  "defaultProvider": "cursor",
-  "defaultModel": "composer-2.5",
-  "defaultThinkingLevel": "high"
+  "tuiMode": "fullscreen"
 }
