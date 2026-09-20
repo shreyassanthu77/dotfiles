@@ -648,13 +648,8 @@ u.pack({
 			},
 			code = { sign = false },
 			anti_conceal = { enabled = false },
-			file_types = { "opencode_output" },
+			file_types = { "markdown" },
 		},
-	},
-	{
-		source = "sudo-tee/opencode.nvim",
-		lazy = true,
-		opts = {},
 	},
 	{
 		source = "esmuellert/codediff.nvim",
