@@ -545,17 +545,14 @@ u.pack({
 				end
 			end
 
-			require("flutter-tools").setup({
-				lsp = {
-					capabilities = capabilities,
-					color = {
-						background = false,
-						background_color = nil,
-						foreground = false,
-						virtual_text = true,
-						virtual_text_str = "■",
-					},
-				},
+			u.autocmd("FileType", {
+				pattern = "dart",
+				once = true,
+				callback = function()
+					require("flutter-tools").setup({
+						lsp = { capabilities = capabilities },
+					})
+				end,
 			})
 		end,
 	},
