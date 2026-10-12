@@ -355,7 +355,7 @@ u.pack({
 					"zig",
 					"python",
 					"astro",
-					"svelte",
+					-- "svelte",
 					"dart",
 					"go",
 					"templ",
@@ -363,17 +363,9 @@ u.pack({
 					"ocaml",
 					"vimdoc",
 				},
-				auto_install = true,
+				-- auto_install = true,
 				highlight = true,
-				languages = {
-					svelte = {
-						install_info = {
-							revision = "ae5199db47757f785e43a14b332118a5474de1a2",
-							url = "https://github.com/tree-sitter-grammars/tree-sitter-svelte",
-						},
-						requires = { "html" },
-					},
-				},
+				languages = {},
 			})
 		end,
 	},
