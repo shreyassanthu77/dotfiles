@@ -5,7 +5,13 @@
     "npm:pi-opencode-bridge",
     "npm:@cgaravitoq/pi-claude-code-auth"
   ],
-  "lastChangelogVersion": "0.85.1",
+  "lastChangelogVersion": "1.1.0",
   "theme": "dark",
-  "tuiMode": "fullscreen"
+  "tuiMode": "fullscreen",
+  "enableInstallTelemetry": false,
+  "defaultProvider": "claude-code",
+  "defaultModel": "claude-opus-5-5",
+  "extensions": [
+    "-builtin:mcp"
+  ]
 }
