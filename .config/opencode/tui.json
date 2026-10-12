@@ -10,12 +10,5 @@
   "scroll_acceleration": {
     "enabled": true
   },
-  "plugin": [
-    [
-      "@ishaksebsib/opencode-tree",
-      {
-        "storageScope": "global"
-      }
-    ]
-  ]
+  "plugin": []
 }
