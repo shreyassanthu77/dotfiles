@@ -1,0 +1,11 @@
+{
+  "name": "opencode-fork-tree",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Fork an OpenCode session into a branch and hand the new branch a system-context summary of the work it left behind.",
+  "exports": {
+    ".": "./index.ts",
+    "./tui": "./tui.ts"
+  }
+}
