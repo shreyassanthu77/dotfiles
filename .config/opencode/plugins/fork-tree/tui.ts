@@ -43,11 +43,14 @@ async function fetchMessages(context: Ctx, sessionID: string): Promise<AnyMessag
   for (let page = 0; page < 100; page++) {
     // NB: the generated client exposes message listing as a top level
     // resource (`client.message.list`), not under `client.session`.
+    //
+    // The pagination cursor is opaque and already encodes the ordering, so
+    // `order` may only be sent on the first request: the server rejects
+    // "Cursor cannot be combined with order".
     const res: any = await context.client.message.list({
       sessionID,
-      order: "asc",
       limit: 100,
-      cursor,
+      ...(cursor ? { cursor } : { order: "asc" }),
     })
     const data = res?.data ?? []
     out.push(...data)
