@@ -41,7 +41,9 @@ async function fetchMessages(context: Ctx, sessionID: string): Promise<AnyMessag
   let cursor: string | undefined
 
   for (let page = 0; page < 100; page++) {
-    const res: any = await context.client.session.message.list({
+    // NB: the generated client exposes message listing as a top level
+    // resource (`client.message.list`), not under `client.session`.
+    const res: any = await context.client.message.list({
       sessionID,
       order: "asc",
       limit: 100,
