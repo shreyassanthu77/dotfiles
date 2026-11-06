@@ -3,6 +3,7 @@
 # on when it is unplugged. Listens to Hyprland events forever; does nothing on
 # machines that have no built-in panel.
 INTERNAL="${INTERNAL_MONITOR:-eDP-1}"
+INTERNAL_LUA=$(jq -Rn --arg name "$INTERNAL" '$name')
 
 # Returns 0 if it changed the layout, 1 if nothing needed doing.
 apply() {
@@ -12,9 +13,9 @@ apply() {
   [ -n "$disabled" ] || return 1                                  # no built-in panel here
   others=$(jq -r --arg i "$INTERNAL" '[.[] | select(.name != $i)] | length' <<<"$json")
   if (( others > 0 )) && [ "$disabled" = false ]; then
-    hyprctl -q keyword monitor "$INTERNAL,disable"
+    hyprctl -q eval "hl.monitor({ output = $INTERNAL_LUA, disabled = true })"
   elif (( others == 0 )) && [ "$disabled" = true ]; then
-    hyprctl -q keyword monitor "$INTERNAL,highrr,auto,1"
+    hyprctl -q eval "hl.monitor({ output = $INTERNAL_LUA, disabled = false, mode = 'highrr', position = 'auto', scale = 1 })"
   else
     return 1
   fi
