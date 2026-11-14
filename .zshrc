@@ -50,7 +50,6 @@ PATHS=(
 	"$HOME/.cargo/bin"
 	"$HOME/.bun/bin"
 	"$HOME/.sst/bin"
-	"$HOME/.turso"
 	"$HOME/flutter/bin"
 	"$HOME/.pub-cache/bin"
 	"$HOME/Android/Sdk/platform-tools"
@@ -71,7 +70,6 @@ if [ -d "$HOME/.zvm" ]; then
 fi
 
 
-command -v pkgx >/dev/null && source <(pkgx --shellcode)
 command -v caddy >/dev/null && source <(caddy completion zsh)
 command -v jj >/dev/null && source <(jj util completion zsh)
 
@@ -87,3 +85,5 @@ function lockfix() {
 ## [/Completion]
 
 [ -d "$HOME/.shorebird/bin" ] && export PATH="$HOME/.shorebird/bin:$PATH"
+
+eval "$(mise activate zsh)"

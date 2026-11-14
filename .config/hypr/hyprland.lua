@@ -7,8 +7,8 @@ local apps = {
     menu = "rofi -show combi",
 }
 
--- Make user scripts (e.g. remote) visible to keybinds and rofi.
-hl.env("PATH", os.getenv("HOME") .. "/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin")
+-- Make user scripts (e.g. remote) and mise shims visible to keybinds and rofi.
+hl.env("PATH", os.getenv("HOME") .. "/.local/share/mise/shims:" .. os.getenv("HOME") .. "/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin")
 
 require("wm.monitors-and-workspaces")
 require("wm.settings")
