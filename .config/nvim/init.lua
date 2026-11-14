@@ -616,30 +616,38 @@ u.pack({
 		}
 	end,
 	{
-		source = "supermaven-inc/supermaven-nvim",
+		source = "numerataz/ninetyfive.nvim",
 		lazy = true,
 		opts = {
-			log_level = "off",
-			disable_keymaps = false,
-			keymaps = {
-				accept_suggestion = "<A-a>",
+			enable_on_startup = true,
+			use_cmp = false,
+			mappings = {
+				accept = "<A-a>",
 				accept_word = "<A-w>",
-				clear_suggestion = "<A-d>",
+				accept_line = "<A-l>",
+				reject = "<A-d>",
+			},
+			indexing = {
+				mode = "ask",
+				cache_consent = true,
 			},
 		},
 	},
-	{
-		source = "MeanderingProgrammer/render-markdown.nvim",
-		lazy = true,
-		opts = {
-			heading = {
-				enabled = false,
-			},
-			code = { sign = false },
-			anti_conceal = { enabled = false },
-			file_types = { "markdown" },
-		},
-	},
+	-- {
+	-- 	source = "MeanderingProgrammer/render-markdown.nvim",
+	-- 	lazy = true,
+	-- 	opts = {
+	-- 		heading = {
+	-- 			enabled = false,
+	-- 		},
+	-- 		code = { sign = false },
+	-- 		link = {
+	-- 			enabled = false,
+	-- 		},
+	-- 		anti_conceal = { enabled = false },
+	-- 		file_types = { "markdown" },
+	-- 	},
+	-- },
 	{
 		source = "esmuellert/codediff.nvim",
 		lazy = true,
