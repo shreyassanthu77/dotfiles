@@ -1,11 +1,11 @@
 {
-  "hideThinkingBlock": false,
+  "hideThinkingBlock": true,
   "packages": [
     "npm:pi-mcp-adapter",
     "npm:pi-opencode-bridge",
     "npm:@cgaravitoq/pi-claude-code-auth"
   ],
-  "lastChangelogVersion": "1.1.0",
+  "lastChangelogVersion": "1.5.1",
   "theme": "dark",
   "tuiMode": "fullscreen",
   "enableInstallTelemetry": false,
@@ -13,5 +13,8 @@
   "defaultModel": "claude-opus-5-5",
   "extensions": [
     "-builtin:mcp"
-  ]
+  ],
+  "extensionChangelogVersions": {
+    "{\"source\":\"npm:pi-mcp-adapter\",\"scope\":\"user\"}": "7.0.1"
+  }
 }
