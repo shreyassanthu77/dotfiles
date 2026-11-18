@@ -3,7 +3,8 @@
   "packages": [
     "npm:pi-mcp-adapter",
     "npm:pi-opencode-bridge",
-    "npm:@cgaravitoq/pi-claude-code-auth"
+    "npm:@cgaravitoq/pi-claude-code-auth",
+    "npm:@plannotator/pi-extension"
   ],
   "lastChangelogVersion": "1.5.1",
   "theme": "dark",
